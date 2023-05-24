@@ -25,7 +25,11 @@ A new experimental framework to perform algorithm benchmarks
     compress function can be called move the uncompressed data into the
     compressed archive.
 
+## Usage
+
+There is one important class `Benchmark` to run the benchmark, and two important
+functions `describe` and `read_as_pandas` to analyze the results.
 
 # Version History
 
-* **0.1.0** First complete version
+- **0.1.0** First complete version

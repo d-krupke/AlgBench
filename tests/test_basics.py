@@ -15,8 +15,6 @@ def test_simple():
     benchmark.compress()
 
     for entry in benchmark:
-        if "environment" in entry["env"]:
-            entry["env"].pop("environment")
-        print(entry)
+        print(entry["parameters"], entry["data"])
 
     benchmark.delete()
