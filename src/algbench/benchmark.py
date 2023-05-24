@@ -18,7 +18,12 @@ class Benchmark:
     
     def _get_arg_data(self, func, args, kwargs):
         sig = inspect.signature(func)
-        func_args = sig.bind(*args, **kwargs).arguments
+        func_args = {
+            k: v.default
+            for k, v in sig.parameters.items()
+            if v.default is not inspect.Parameter.empty
+        }
+        func_args.update(sig.bind(*args, **kwargs).arguments)
         data = {"func": func.__name__,
                 "args": {key: value for key, value in func_args.items()
                  if not key.startswith("_")}}
