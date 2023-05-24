@@ -2,6 +2,7 @@ from .json_serializer import to_json
 from .nfs_json_list import NfsJsonList
 import typing
 
+
 class NfsJsonSet:
     def __init__(self, path) -> None:
         self._db = NfsJsonList(path)
@@ -42,6 +43,6 @@ class NfsJsonSet:
     def clear(self):
         self._db.clear()
         self._values.clear()
-    
+
     def delete(self):
         self._db.delete()

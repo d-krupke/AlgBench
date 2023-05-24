@@ -24,3 +24,8 @@ A new experimental framework to perform algorithm benchmarks
     part for concurrent input. Once the benchmark is finished (or paused), a
     compress function can be called move the uncompressed data into the
     compressed archive.
+
+
+# Version History
+
+* **0.1.0** First complete version

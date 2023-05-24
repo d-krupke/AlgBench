@@ -81,7 +81,8 @@ repos:
           - setuptools-scm
           - tomli
           - types-setuptools>=67.8
-
+          - types-PyYAML
+          - pandas-stubs
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.2.4

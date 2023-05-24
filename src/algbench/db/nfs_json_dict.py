@@ -1,9 +1,7 @@
-
 from .nfs_json_list import NfsJsonList
 
 from .json_serializer import to_json
 import typing
-
 
 
 class NfsJsonDict:

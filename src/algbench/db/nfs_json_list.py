@@ -16,6 +16,7 @@ from zipfile import ZipFile
 
 _log = logging.getLogger("AlgBench")
 
+
 class NfsJsonList:
     """
     A simple database to dump data (dictionaries) into. Should be reasonably threadsafe
@@ -30,7 +31,8 @@ class NfsJsonList:
             _log.info(f"Created new database '{path}'.")
         if os.path.isfile(path):
             raise RuntimeError(
-                f"Cannot create database {path} because there exists an equally named file."
+                f"Cannot create database {path} because there "
+                "exists an equally named file."
             )
         self._subfile_path: typing.Union[str, pathlib.Path] = self._get_unique_name()
         self._cache: typing.List = []
@@ -108,10 +110,14 @@ class NfsJsonList:
                     with z.open(filename, "r") as f:
                         for line in f.readlines():
                             try:
-                                yield json.loads(line)
-                            except:
-                                # Just continue. Probably a synchronization thing of the NFS.
-                                _log.warning(f'Could not load "{line}" in "{compr_path}".')
+                                entry = json.loads(line)
+                                yield entry
+                            except Exception:
+                                # Just continue. Probably a synchronization
+                                #  thing of the NFS.
+                                _log.warning(
+                                    f'Could not load "{line}" in "{compr_path}".'
+                                )
 
     def iter_uncompressed(self):
         # load uncompressed data
@@ -122,8 +128,9 @@ class NfsJsonList:
             with open(path, "r") as f:
                 for entry in f.readlines():
                     try:
-                        yield json.loads(entry)
-                    except:
+                        entry_ = json.loads(entry)
+                        yield entry_
+                    except Exception:
                         # Just continue. Probably a synchronization thing of the NFS.
                         _log.warning(f'Could not load "{entry}" in "{path}".')
 
@@ -134,8 +141,6 @@ class NfsJsonList:
             yield entry
         for entry in self.iter_cache():
             yield entry
-
-
 
     def load(self) -> typing.List:
         return list(self)
