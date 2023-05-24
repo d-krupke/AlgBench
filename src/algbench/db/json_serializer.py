@@ -5,6 +5,7 @@ If something cannot be converted to JSON, it is converted to str.
 """
 import json
 
+
 def to_json(obj):
     """
     Convert the object to a JSON-serializable object.
@@ -26,6 +27,7 @@ def to_json(obj):
     if isinstance(obj, tuple):
         return [to_json(e) for e in obj]
     return str(obj)
+
 
 def to_json_str(obj):
     data = to_json(obj)

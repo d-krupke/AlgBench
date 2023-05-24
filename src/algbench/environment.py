@@ -26,6 +26,7 @@ def get_git_revision() -> typing.Optional[str]:
         label = None
     return label
 
+
 def get_environment_info(cached=True) -> dict:
     """
     Returns extensive information on the environment
@@ -36,16 +37,18 @@ def get_environment_info(cached=True) -> dict:
     if cached and __cached:
         return __cached
     __cached = {
-        "hostname":  socket.gethostname(),
-        "python_version":  sys.version,
+        "hostname": socket.gethostname(),
+        "python_version": sys.version,
         "python": sys.executable,
         "cwd": os.getcwd(),
         "environment": [
-        {"name": str(pkg.project_name),
-          "path": str(pkg.location), 
-          "version": str(pkg.parsed_version)
-            } for pkg in pkg_resources.working_set
-    ],
-    "git_revision": get_git_revision(),
+            {
+                "name": str(pkg.project_name),
+                "path": str(pkg.location),
+                "version": str(pkg.parsed_version),
+            }
+            for pkg in pkg_resources.working_set
+        ],
+        "git_revision": get_git_revision(),
     }
     return __cached

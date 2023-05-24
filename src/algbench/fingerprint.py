@@ -1,5 +1,6 @@
 import hashlib
-from .json_serializer import to_json_str
+from .db.json_serializer import to_json_str
+
 
 def fingerprint(data) -> str:
     """
