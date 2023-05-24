@@ -1,6 +1,6 @@
 """
 AlgBench is designed to perform benchmarks on algorithms.
-It saves a lot of the informations automatically, reducing
+It saves a lot of the information automatically, reducing
 the usual boilerplate code.
 
 ```python

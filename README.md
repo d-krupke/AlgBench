@@ -7,7 +7,7 @@ algorithms.
   forget something.
 - If you add some further instances or want to compare an additional parameter,
   you have to check which data is already available to **skip existing
-  entries**. Same if you need to interupt the benchmark.
+  entries**. Same if you need to interrupt the benchmark.
 - Just piping the results into a file can create a **huge amount of data**, no
   longer fitting into memory.
 - Proper benchmarks often take days or even weeks to run, such that
@@ -22,7 +22,7 @@ AlgBench tries to ease your life by
   runtime, environment information, stdout, etc.) automatically with a single
   line of code
 - remembering which function arguments have already run and skipping those
-- providing a compressable database to save memory, and saving highly redundant
+- providing a compressible database to save memory, and saving highly redundant
   information, e.g., of the environment, only once
 - providing an NFS-compatible parallel database and compatibility to
   distribution libraries, such as slurminade
@@ -34,7 +34,7 @@ AlgBench tries to ease your life by
 There is one important class `Benchmark` to run the benchmark, and two important
 functions `describe` and `read_as_pandas` to analyze the results.
 
-## On doing good emperical evaluations of algorithms
+## On doing good empirical evaluations of algorithms
 
 To get a feeling on the interesting instances and parameters, or generally on
 where to look deeper, you should first perform an explorative study. For such an
@@ -48,7 +48,7 @@ Here are some general hints:
 - Create a separate folder for every study.
 - Add a README.md into each folder that describes the study. At least describe
   in a sentence, who created this study when in which context.
-- Have separated, numerated files for preparing, runing, processing, checking,
+- Have separated, numerated files for preparing, running, processing, checking,
   and evaluating the study.
 - Extract a simplified pandas table from the database with only the important
   data (e.g., stdout or environment information are only necessary for debugging
@@ -59,7 +59,7 @@ Here are some general hints:
 - Use a separate Jupyter-notebook for each family of plots you want to generate.
 - Save the plots into files whose name you can easily trace back to the
   generating notebook. You will probably copy them later into some paper and
-  half a year later, when you recieve the reviews and want to do some changes,
+  half a year later, when you receive the reviews and want to do some changes,
   you have to find the code that generated them.
 
 # Version History
