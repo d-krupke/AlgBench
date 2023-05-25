@@ -13,7 +13,7 @@ def test_simple():
     benchmark.add(f, 3, _test=None)
 
     benchmark.compress()
-
+    benchmark.delete_if(lambda entry: False)
     for entry in benchmark:
         print(entry["parameters"], entry["data"])
 

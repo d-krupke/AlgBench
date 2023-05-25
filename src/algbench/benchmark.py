@@ -53,7 +53,12 @@ class Benchmark:
     """
 
     def __init__(self, path: str) -> None:
-        """ """
+        """
+        Just specify the path of where to put the
+        database and everything else happens magically.
+        Make sure not to use the same path for different
+        databases, as they will get mixed.
+        """
         self._db = BenchmarkDb(path)
 
     def _get_arg_data(self, func, args, kwargs):
@@ -180,6 +185,9 @@ class Benchmark:
         Useful for checking its content.
         """
         return self._db.front()
+    
+    def clear(self):
+        self._db.clear()
 
     def delete_if(self, condition: typing.Callable[[typing.Dict], bool]):
         """
@@ -198,7 +206,7 @@ class Benchmark:
             for entry in self:
                 if not condition(entry):
                     benchmark_copy.insert(entry)
-            self.delete()
+            self.clear()
             for entry in benchmark_copy:
                 self.insert(entry)
             self.compress()

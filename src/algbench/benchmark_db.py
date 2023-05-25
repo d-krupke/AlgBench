@@ -21,9 +21,9 @@ class BenchmarkDb:
 
     def insert(self, entry: typing.Dict):
         # extract data from entry
-        env_fingp = entry["env_fingerprint"]
+        env_fingp = entry["data"]["env_fingerprint"]
         env_data = entry["env"]
-        arg_fingerprint = entry["args_fingerprint"]
+        arg_fingerprint = entry["data"]["args_fingerprint"]
         arg_data = entry["parameters"]
         result = entry["data"]
         # write into database
@@ -53,6 +53,12 @@ class BenchmarkDb:
         self._data.delete()
         self._env_data.delete()
         shutil.rmtree(self.path)
+
+    def clear(self):
+        self._arg_fingerprints.clear()
+        self._arg_data.clear()
+        self._data.clear()
+        self._env_data.clear()
 
     def get_env_info(self, env_fingerprint):
         return self._env_data[env_fingerprint]

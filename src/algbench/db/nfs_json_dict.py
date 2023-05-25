@@ -48,5 +48,8 @@ class NfsJsonDict:
         self._db.append(self._values)
         self._db.compress()
 
+    def clear(self):
+        self._db.clear()
+
     def delete(self):
         self._db.delete()
