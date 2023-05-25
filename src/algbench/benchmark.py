@@ -26,9 +26,11 @@ class Benchmark:
 
     benchmark = Benchmark("./test_benchmark")
 
+
     def f(x, _test=2, default="default"):
         print(x)  # here you would run your algorithm
         return {"r1": x, "r2": "test"}
+
 
     benchmark.add(f, 1, _test=None)
     benchmark.add(f, 2)
@@ -187,7 +189,7 @@ class Benchmark:
         Useful for checking its content.
         """
         return self._db.front()
-    
+
     def clear(self):
         """
         Clears all entries of the benchmark, without deleting

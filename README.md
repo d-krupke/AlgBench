@@ -39,7 +39,7 @@ functions `describe` and `read_as_pandas` to analyze the results.
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="Benchmark">class <strong>Benchmark</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
-    
+
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>Benchmark(path:&nbsp;str)&nbsp;-&amp;gt;&nbsp;None<br>
 &nbsp;<br>
@@ -165,32 +165,38 @@ Here are some general hints:
   half a year later, when you receive the reviews and want to do some changes,
   you have to find the code that generated them.
 
-
 ## Using Git LFS for the data
 
-The data are large binary files. Use Git LFS to add them to your repository more efficiently.
+The data are large binary files. Use Git LFS to add them to your repository more
+efficiently.
 
 You can find a guide [here](https://git-lfs.com/) on how to install Git LFS.
 
 Run
+
 ```bash
 git lfs install
 ```
+
 to set up git LFS and
+
 ```bash
 git lfs track "*.zip"
 ```
+
 to manage all zips via LFS.
 
 Alternatively, you can also just edit `.gitattributes` by hand
+
 ```
 *.zip filter=lfs diff=lfs merge=lfs -text
 ```
 
 Finally, add `.gitattributes` to git via
+
 ```bash
 git add .gitattributes
-``` 
+```
 
 # Version History
 

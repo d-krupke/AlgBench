@@ -9,6 +9,7 @@ import networkx as nx
 benchmark = Benchmark("03_benchmark_data")
 instances = InstanceDb("./01_instances.zip")
 
+
 def load_instance_and_run(instance_name: str, alg_params):
     # load the instance outside the actual measurement
     g = instances[instance_name]
@@ -20,10 +21,11 @@ def load_instance_and_run(instance_name: str, alg_params):
             "num_vertices": _instance.number_of_nodes(),
             "num_edges": _instance.number_of_edges(),
             "coloring": coloring,
-            "n_colors": max(coloring.values())+1,
+            "n_colors": max(coloring.values()) + 1,
         }
-    
+
     benchmark.add(eval_greedy_alg, instance_name, alg_params, g)
+
 
 alg_params_to_evaluate = [
     {"strategy": "largest_first", "interchange": True},
