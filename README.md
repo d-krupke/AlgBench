@@ -32,6 +32,13 @@ AlgBench tries to ease your life by
 There is a predecessor project, called [AeMeasure](https://github.com/d-krupke/AeMeasure).
 AeMeasure made saving the data easy, but required more boilerplate code and reading the data was more difficult and less efficient.
 
+## Installation
+
+You can install AlgBench using pip
+```bash
+pip install -U algbench
+```
+
 ## Usage
 
 There is one important class `Benchmark` to run the benchmark, and two important
