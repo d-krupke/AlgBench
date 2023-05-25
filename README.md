@@ -226,7 +226,7 @@ describe("./03_benchmark_data/")
 
 <details>
 <summary>Output</summary>
-```
+<pre>
  result:
 | num_vertices: 68
 | num_edges: 697
@@ -275,7 +275,7 @@ describe("./03_benchmark_data/")
 | environment: [{'name': 'virtualenv', 'path': '/home/krupke/.local/lib/python3.10/site-pack...
 | git_revision: 5357426feb4b49174c313ffa33e2cadf6a83e226
 | python_file: /home/krupke/Repositories/AlgBench/examples/graph_coloring/02_run_benchmark.py
-```
+</pre>
 </details>
 
 ```python
@@ -285,7 +285,7 @@ Benchmark("./03_benchmark_data/").front()
 
 <details>
 <summary>Output</summary>
-```
+<pre>
 {'result': {'num_vertices': 68,
   'num_edges': 697,
   'coloring': {'0': 7,
@@ -335,7 +335,7 @@ Benchmark("./03_benchmark_data/").front()
   ...],
   'git_revision': '5357426feb4b49174c313ffa33e2cadf6a83e226',
   'python_file': '/home/krupke/Repositories/AlgBench/examples/graph_coloring/02_run_benchmark.py'}}
-```
+</pre>
 </details>
 
 ```python
