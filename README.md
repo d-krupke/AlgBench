@@ -68,9 +68,11 @@ from&nbsp;algbench&nbsp;import&nbsp;Benchmark<br>
 &nbsp;<br>
 benchmark&nbsp;=&nbsp;Benchmark("./test_benchmark")<br>
 &nbsp;<br>
+&nbsp;<br>
 def&nbsp;f(x,&nbsp;_test=2,&nbsp;default="default"):<br>
 &nbsp;&nbsp;&nbsp;&nbsp;print(x)&nbsp;&nbsp;#&nbsp;here&nbsp;you&nbsp;would&nbsp;run&nbsp;your&nbsp;algorithm<br>
 &nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;{"r1":&nbsp;x,&nbsp;"r2":&nbsp;"test"}<br>
+&nbsp;<br>
 &nbsp;<br>
 benchmark.<a href="#Benchmark-add">add</a>(f,&nbsp;1,&nbsp;_test=None)<br>
 benchmark.<a href="#Benchmark-add">add</a>(f,&nbsp;2)<br>
@@ -222,94 +224,101 @@ from algbench import describe, read_as_pandas, Benchmark
 describe("./03_benchmark_data/")
 ```
 
+<details>
+<summary>Output</summary>
 ```
-parameters:
+ result:
+| num_vertices: 68
+| num_edges: 697
+| coloring:
+|| 0: 7
+|| 1: 8
+|| 2: 2
+|| 3: 5
+|| 4: 3
+|| 5: 7
+|| 6: 7
+|| 7: 6
+|| 8: 5
+|| 9: 4
+|| 10: 5
+|| 11: 4
+|| 12: 0
+|| 13: 6
+|| 14: 0
+|| 15: 3
+|| 16: 5
+|| 17: 5
+|| 18: 7
+|| 19: 0
+|| ...
+| n_colors: 9
+ timestamp: 2023-05-25T21:58:39.201553
+ runtime: 0.002952098846435547
+ stdout:
+ stderr:
+ env_fingerprint: 53ad3b5b29d082d7e2bca6881ec9fe35fe441ae1
+ args_fingerprint: 10ce65b7a61d5ecbfcb1f4e390d72122f7a1f6ec
+ parameters:
 | func: eval_greedy_alg
 | args:
 || instance_name: graph_0
 || alg_params:
 ||| strategy: largest_first
 ||| interchange: True
-env:
+ argv: ['02_run_benchmark.py']
+ env:
 | hostname: workstation-r7
 | python_version: 3.10.9 (main, Jan 11 2023, 15:21:40) [GCC 11.2.0]
 | python: /home/krupke/anaconda3/envs/mo310/bin/python3
 | cwd: /home/krupke/Repositories/AlgBench/examples/graph_coloring
 | environment: [{'name': 'virtualenv', 'path': '/home/krupke/.local/lib/python3.10/site-pack...
-data:
-| result:
-|| num_vertices: 50
-|| num_edges: 275
-|| coloring:
-||| 0: 2
-||| 1: 0
-||| 2: 1
-||| 3: 1
-||| 4: 3
-||| 5: 1
-||| 6: 4
-||| 7: 3
-||| 8: 3
-||| 9: 3
-||| 10: 1
-||| 11: 4
-||| 12: 1
-||| 13: 2
-||| 14: 3
-||| 15: 0
-||| 16: 0
-||| 17: 0
-||| 18: 0
-||| 19: 1
-||| ...
-|| n_colors: 6
-| timestamp: 2023-05-25T15:22:37.540734
-| runtime: 0.0009615421295166016
-| stdout:
-| stderr:
-| env_fingerprint: b2cee276004fd00bcb5343f9d8e9199c13c25fec
-| args_fingerprint: 10ce65b7a61d5ecbfcb1f4e390d72122f7a1f6ec
+| git_revision: 5357426feb4b49174c313ffa33e2cadf6a83e226
+| python_file: /home/krupke/Repositories/AlgBench/examples/graph_coloring/02_run_benchmark.py
 ```
+</details>
 
 ```python
 # we can also see the raw data of the first entry using `front`
 Benchmark("./03_benchmark_data/").front()
 ```
 
+<details>
+<summary>Output</summary>
 ```
-{'parameters': {'func': 'eval_greedy_alg',
-  'args': {'instance_name': 'graph_0',
-   'alg_params': {'strategy': 'largest_first', 'interchange': True}}},
- 'env': {'hostname': 'workstation-r7',
-  'python_version': '3.10.9 (main, Jan 11 2023, 15:21:40) [GCC 11.2.0]',
-  'python': '/home/krupke/anaconda3/envs/mo310/bin/python3',
-  'cwd': '/home/krupke/Repositories/AlgBench/examples/graph_coloring',
-  'environment': [{'name': 'virtualenv',
-    'path': '/home/krupke/.local/lib/python3.10/site-packages',
-    'version': '20.14.1'},
-   {'name': 'cfgv',
-    'path': '/home/krupke/.local/lib/python3.10/site-packages',
-    'version': '3.3.1'},
-   {'name': 'pre-commit',
-    'path': '/home/krupke/.local/lib/python3.10/site-packages',
-    'version': '2.18.1'},
-   {'name': 'identify',
-    'path': '/home/krupke/.local/lib/python3.10/site-packages',
-    'version': '2.4.12'},
-   {'name': 'py',
-    'path': '/home/krupke/.local/lib/python3.10/site-packages',
-    'version': '1.11.0'},
-   {'name': 'nodeenv',
-    'path': '/home/krupke/.local/lib/python3.10/site-packages',
-    'version': '1.6.0'},
+{'result': {'num_vertices': 68,
+  'num_edges': 697,
+  'coloring': {'0': 7,
+   '1': 8,
+   '2': 2,
+   '3': 5,
+   '4': 3,
+   '5': 7,
+   '6': 7,
+   '7': 6,
+   '8': 5,
+   '9': 4,
+   '10': 5,
+   '11': 4,
+   '12': 0,
+   '13': 6,
+   '14': 0,
+   '15': 3,
+   '16': 5,
+   '17': 5,
+   '18': 7,
+   '19': 0,
+   '20': 2,
+   '21': 3,
+   '22': 1,
 ...
-  'runtime': 0.0009615421295166016,
-  'stdout': '',
-  'stderr': '',
-  'env_fingerprint': 'b2cee276004fd00bcb5343f9d8e9199c13c25fec',
-  'args_fingerprint': '10ce65b7a61d5ecbfcb1f4e390d72122f7a1f6ec'}}
+   {'name': 'cgshop2023-pyutils',
+    'path': '/home/krupke/anaconda3/envs/mo310/lib/python3.10/site-packages/cgshop2023_pyutils-0.2.10-py3.10-linux-x86_64.egg',
+    'version': '0.2.10'}],
+  'git_revision': '5357426feb4b49174c313ffa33e2cadf6a83e226',
+  'python_file': '/home/krupke/Repositories/AlgBench/examples/graph_coloring/02_run_benchmark.py'}}
 ```
-
+</details>
 ```python
 # we can extract a full pandas tables using `read_as_pandas`
 t = read_as_pandas(
@@ -320,28 +329,39 @@ t = read_as_pandas(
         "interchange": result["parameters"]["args"]["alg_params"].get(
             "interchange", None
         ),
-        "colors": result["data"]["result"]["n_colors"],
+        "colors": result["result"]["n_colors"],
+        "runtime": result["runtime"],
+        "num_vertices": result["result"]["num_vertices"],
+        "num_edges": result["result"]["num_edges"],
     },
 )
-t
+print(t)
 ```
+<details>
+<summary>Output</summary>
+```
+       instance                  strategy interchange  colors   runtime
+0       graph_0             largest_first        True       9  0.002952  \
+1       graph_0             largest_first       False      10  0.000183
+2       graph_0         random_sequential        True       9  0.003562
+3       graph_0         random_sequential       False      12  0.000173
+4       graph_0             smallest_last        True       9  0.003813
+...         ...                       ...         ...     ...       ...
+5995  graph_499  connected_sequential_bfs        True       3  0.000216
+5996  graph_499  connected_sequential_bfs       False       3  0.000132
+5997  graph_499  connected_sequential_dfs        True       3  0.000231
+5998  graph_499  connected_sequential_dfs       False       4  0.000132
+5999  graph_499  saturation_largest_first        None       3  0.000202
 
-```
-      instance                  strategy interchange  colors
-0      graph_0             largest_first        True       6
-1      graph_0             largest_first       False       7
-2      graph_0         random_sequential        True       6
-3      graph_0         random_sequential       False       7
-4      graph_0             smallest_last        True       6
-...        ...                       ...         ...     ...
-1195  graph_99  connected_sequential_bfs        True      15
-1196  graph_99  connected_sequential_bfs       False      17
-1197  graph_99  connected_sequential_dfs        True      14
-1198  graph_99  connected_sequential_dfs       False      15
-1199  graph_99  saturation_largest_first        None      15
+      num_vertices  num_edges
 
-[1200 rows x 4 columns]
-```
+0 68 697 1 68 697 2 68 697 3 68 697 4 68 697 ... ... ... 5995 16 24 5996 16 24
+5997 16 24 5998 16 24 5999 16 24
+
+[6000 rows x 7 columns]
+
+````
+</details>
 
 ## Which information is saved?
 
@@ -400,7 +420,7 @@ Run
 
 ```bash
 git lfs install
-```
+````
 
 to set up git LFS and
 
@@ -424,6 +444,8 @@ git add .gitattributes
 
 # Version History
 
+- **1.0.0** Changing the database layout, making it more efficient (breaking
+  change!).
 - **0.2.0** Changing database slightly to contain meta data and doing more
   caching. Saving some more information.
 - **0.1.3** Fixed bug in arg fingerprint set.

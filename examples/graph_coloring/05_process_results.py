@@ -12,8 +12,10 @@ if __name__ == "__main__":
             "interchange": result["parameters"]["args"]["alg_params"].get(
                 "interchange", None
             ),
-            "colors": result["data"]["result"]["n_colors"],
-            "runtime": result["data"]["runtime"],
+            "colors": result["result"]["n_colors"],
+            "runtime": result["runtime"],
+            "num_vertices": result["result"]["num_vertices"],
+            "num_edges": result["result"]["num_edges"],
         },
     )
     t.to_json("./06_simplified_results.json.zip")

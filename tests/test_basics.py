@@ -16,7 +16,7 @@ def test_simple():
     benchmark.delete_if(lambda entry: False)
     n = 0
     for entry in benchmark:
-        print(entry["parameters"], entry["data"])
+        print({k: v for k, v in entry.items() if k != "env"})
         n += 1
     assert n == 3
     benchmark.delete()

@@ -7,7 +7,7 @@ where = ["src"]
 
 [project]
 name = "AlgBench"
-version = "0.2.0"
+version = "1.0.0"
 authors = [
     { name = "TU Braunschweig, IBR, Algorithms Group (Dominik Krupke)", email = "krupke@ibr.cs.tu-bs.de" },
 ]

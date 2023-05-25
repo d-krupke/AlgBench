@@ -33,15 +33,7 @@ def describe(path: str):
     entry = Benchmark(path).front()
     if not entry:
         return
-    parameters = entry["parameters"]
-    print("parameters:")
-    _describe_data(parameters, 1, 10, 5)
-    env = entry["env"]
-    print("env:")
-    _describe_data(env, 1, 5, 3)
-    data = entry["data"]
-    print("data:")
-    _describe_data(data, 1, 20, 5)
+    _describe_data(entry, 0, 20, 5)
 
 
 def read_as_pandas(
