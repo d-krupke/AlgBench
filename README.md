@@ -255,8 +255,8 @@ describe("./03_benchmark_data/")
 | n_colors: 9
  timestamp: 2023-05-25T21:58:39.201553
  runtime: 0.002952098846435547
- stdout:
- stderr:
+ stdout: 
+ stderr: 
  env_fingerprint: 53ad3b5b29d082d7e2bca6881ec9fe35fe441ae1
  args_fingerprint: 10ce65b7a61d5ecbfcb1f4e390d72122f7a1f6ec
  parameters:
@@ -275,6 +275,7 @@ describe("./03_benchmark_data/")
 | environment: [{'name': 'virtualenv', 'path': '/home/krupke/.local/lib/python3.10/site-pack...
 | git_revision: 5357426feb4b49174c313ffa33e2cadf6a83e226
 | python_file: /home/krupke/Repositories/AlgBench/examples/graph_coloring/02_run_benchmark.py
+
 ```
 </details>
 
@@ -310,11 +311,29 @@ Benchmark("./03_benchmark_data/").front()
    '19': 0,
    '20': 2,
    '21': 3,
-   '22': 1,
-...
-   {'name': 'cgshop2023-pyutils',
-    'path': '/home/krupke/anaconda3/envs/mo310/lib/python3.10/site-packages/cgshop2023_pyutils-0.2.10-py3.10-linux-x86_64.egg',
-    'version': '0.2.10'}],
+    ...},
+  'n_colors': 9},
+ 'timestamp': '2023-05-25T21:58:39.201553',
+ 'runtime': 0.002952098846435547,
+ 'stdout': '',
+ 'stderr': '',
+ 'env_fingerprint': '53ad3b5b29d082d7e2bca6881ec9fe35fe441ae1',
+ 'args_fingerprint': '10ce65b7a61d5ecbfcb1f4e390d72122f7a1f6ec',
+ 'parameters': {'func': 'eval_greedy_alg',
+  'args': {'instance_name': 'graph_0',
+   'alg_params': {'strategy': 'largest_first', 'interchange': True}}},
+ 'argv': ['02_run_benchmark.py'],
+ 'env': {'hostname': 'workstation-r7',
+  'python_version': '3.10.9 (main, Jan 11 2023, 15:21:40) [GCC 11.2.0]',
+  'python': '/home/krupke/anaconda3/envs/mo310/bin/python3',
+  'cwd': '/home/krupke/Repositories/AlgBench/examples/graph_coloring',
+  'environment': [{'name': 'virtualenv',
+    'path': '/home/krupke/.local/lib/python3.10/site-packages',
+    'version': '20.14.1'},
+   {'name': 'cfgv',
+    'path': '/home/krupke/.local/lib/python3.10/site-packages',
+    'version': '3.3.1'},
+  ...],
   'git_revision': '5357426feb4b49174c313ffa33e2cadf6a83e226',
   'python_file': '/home/krupke/Repositories/AlgBench/examples/graph_coloring/02_run_benchmark.py'}}
 ```
