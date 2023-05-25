@@ -56,13 +56,14 @@ def read_as_pandas(
     n = 0
     benchmark = Benchmark(path)
     for entry in benchmark:
-        for key, value in row_creator(entry).items():
+        row = row_creator(entry)
+        for key, value in row.items():
             if key not in data:
                 data[key] = n * []
             data[key].append(value)
             n += 1
         # Fill up missing entries with None
         for column in data:
-            if column not in entry:
+            if column not in row:
                 data[column].append(None)
     return pd.DataFrame(data=data)

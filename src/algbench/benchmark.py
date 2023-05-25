@@ -14,7 +14,7 @@ from .db.json_serializer import to_json
 
 class Benchmark:
     """
-    This is the heart of the library. It allows to run, safe, and load
+    This is the heart of the library. It allows to run, save, and load
     a benchmark.
 
     The function `add` will run a configuration, if it is not
@@ -22,13 +22,13 @@ class Benchmark:
     `run`. This may be advised if you want to distribute the execution.
 
     ```python
-    benchmark = Benchmark("./test_benchmark")
+    from algbench import Benchmark
 
+    benchmark = Benchmark("./test_benchmark")
 
     def f(x, _test=2, default="default"):
         print(x)  # here you would run your algorithm
         return {"r1": x, "r2": "test"}
-
 
     benchmark.add(f, 1, _test=None)
     benchmark.add(f, 2)
@@ -173,7 +173,9 @@ class Benchmark:
 
     def delete(self):
         """
-        Delete the benchmark.
+        Delete the benchmark and all its files. Do not use it afterwards,
+        there are no files left to write results into.
+        If you just want to delete the content, use `clear.
 
         NOT THREAD-SAFE!
         """
@@ -187,6 +189,12 @@ class Benchmark:
         return self._db.front()
     
     def clear(self):
+        """
+        Clears all entries of the benchmark, without deleting
+        the benchmark itself. You can continue to use it afterwards.
+
+        NOT THREAD-SAFE!
+        """
         self._db.clear()
 
     def delete_if(self, condition: typing.Callable[[typing.Dict], bool]):

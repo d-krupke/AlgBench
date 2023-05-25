@@ -37,7 +37,7 @@ class NfsJsonSet:
         """
         self.load()  # in case there have been writes in the meantime
         self._db.clear()
-        self._db.extend(list(self._values))
+        self._db.append(list(self._values))
         self._db.compress()
 
     def clear(self):

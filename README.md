@@ -165,7 +165,36 @@ Here are some general hints:
   half a year later, when you receive the reviews and want to do some changes,
   you have to find the code that generated them.
 
+
+## Using Git LFS for the data
+
+The data are large binary files. Use Git LFS to add them to your repository more efficiently.
+
+You can find a guide [here](https://git-lfs.com/) on how to install Git LFS.
+
+Run
+```bash
+git lfs install
+```
+to set up git LFS and
+```bash
+git lfs track "*.zip"
+```
+to manage all zips via LFS.
+
+Alternatively, you can also just edit `.gitattributes` by hand
+```
+*.zip filter=lfs diff=lfs merge=lfs -text
+```
+
+Finally, add `.gitattributes` to git via
+```bash
+git add .gitattributes
+``` 
+
 # Version History
 
+- **0.1.3** Fixed bug in arg fingerprint set.
+- **0.1.2** Fixed bug with empty rows in pandas table.
 - **0.1.1** Fixed bug with `delete_if`.
 - **0.1.0** First complete version
