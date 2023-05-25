@@ -14,7 +14,7 @@ class BenchmarkDb:
         self._arg_fingerprints = NfsJsonSet(os.path.join(path, "arg_fingerprints"))
         self._arg_data = NfsJsonDict(os.path.join(path, "arg_dict"))
         self._data = NfsJsonList(os.path.join(path, "results"))
-        self._env_data = NfsJsonDict(os.path.join(path, "env"))
+        self._env_data = NfsJsonDict(os.path.join(path, "env_info"))
 
     def contains_fingerprint(self, fingerprint):
         return fingerprint in self._arg_fingerprints
@@ -46,6 +46,7 @@ class BenchmarkDb:
         self._arg_fingerprints.compress()
         self._arg_data.compress()
         self._data.compress()
+        self._env_data.compress()
 
     def delete(self):
         self._arg_fingerprints.delete()
