@@ -319,6 +319,7 @@ Benchmark("./03_benchmark_data/").front()
   'python_file': '/home/krupke/Repositories/AlgBench/examples/graph_coloring/02_run_benchmark.py'}}
 ```
 </details>
+
 ```python
 # we can extract a full pandas tables using `read_as_pandas`
 t = read_as_pandas(
@@ -337,11 +338,13 @@ t = read_as_pandas(
 )
 print(t)
 ```
+
 <details>
 <summary>Output</summary>
+
 ```
-       instance                  strategy interchange  colors   runtime
-0       graph_0             largest_first        True       9  0.002952  \
+       instance                  strategy interchange  colors   runtime ...
+0       graph_0             largest_first        True       9  0.002952  
 1       graph_0             largest_first       False      10  0.000183
 2       graph_0         random_sequential        True       9  0.003562
 3       graph_0         random_sequential       False      12  0.000173
@@ -353,14 +356,10 @@ print(t)
 5998  graph_499  connected_sequential_dfs       False       4  0.000132
 5999  graph_499  saturation_largest_first        None       3  0.000202
 
-      num_vertices  num_edges
-
-0 68 697 1 68 697 2 68 697 3 68 697 4 68 697 ... ... ... 5995 16 24 5996 16 24
-5997 16 24 5998 16 24 5999 16 24
 
 [6000 rows x 7 columns]
 
-````
+```
 </details>
 
 ## Which information is saved?
