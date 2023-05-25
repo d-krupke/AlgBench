@@ -8,6 +8,7 @@ import subprocess
 import sys
 import typing
 import pkg_resources
+import __main__
 
 __cached = None
 
@@ -50,5 +51,6 @@ def get_environment_info(cached=True) -> dict:
             for pkg in pkg_resources.working_set
         ],
         "git_revision": get_git_revision(),
+        "python_file": __main__.__file__,
     }
     return __cached

@@ -29,12 +29,15 @@ AlgBench tries to ease your life by
 - using a simple format based on JSON and Zip to allow simple parsing and even
   repairing broken databases by hand
 
-There is a predecessor project, called [AeMeasure](https://github.com/d-krupke/AeMeasure).
-AeMeasure made saving the data easy, but required more boilerplate code and reading the data was more difficult and less efficient.
+There is a predecessor project, called
+[AeMeasure](https://github.com/d-krupke/AeMeasure). AeMeasure made saving the
+data easy, but required more boilerplate code and reading the data was more
+difficult and less efficient.
 
 ## Installation
 
 You can install AlgBench using pip
+
 ```bash
 pip install -U algbench
 ```
@@ -49,7 +52,7 @@ functions `describe` and `read_as_pandas` to analyze the results.
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="Benchmark">class <strong>Benchmark</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
-    
+
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>Benchmark(path:&nbsp;str)&nbsp;-&amp;gt;&nbsp;None<br>
 &nbsp;<br>
@@ -157,9 +160,8 @@ Data descriptors defined here:<br>
 </dl>
 </td></tr></table>
 
-
-You can find [an example for graph coloring](./examples/graph_coloring/).
-The important parts are shown below.
+You can find [an example for graph coloring](./examples/graph_coloring/). The
+important parts are shown below.
 
 ### Running a benchmark
 
@@ -219,6 +221,7 @@ from algbench import describe, read_as_pandas, Benchmark
 
 describe("./03_benchmark_data/")
 ```
+
 ```
 parameters:
 | func: eval_greedy_alg
@@ -262,15 +265,17 @@ data:
 || n_colors: 6
 | timestamp: 2023-05-25T15:22:37.540734
 | runtime: 0.0009615421295166016
-| stdout: 
-| stderr: 
+| stdout:
+| stderr:
 | env_fingerprint: b2cee276004fd00bcb5343f9d8e9199c13c25fec
 | args_fingerprint: 10ce65b7a61d5ecbfcb1f4e390d72122f7a1f6ec
 ```
+
 ```python
 # we can also see the raw data of the first entry using `front`
 Benchmark("./03_benchmark_data/").front()
 ```
+
 ```
 {'parameters': {'func': 'eval_greedy_alg',
   'args': {'instance_name': 'graph_0',
@@ -304,6 +309,7 @@ Benchmark("./03_benchmark_data/").front()
   'env_fingerprint': 'b2cee276004fd00bcb5343f9d8e9199c13c25fec',
   'args_fingerprint': '10ce65b7a61d5ecbfcb1f4e390d72122f7a1f6ec'}}
 ```
+
 ```python
 # we can extract a full pandas tables using `read_as_pandas`
 t = read_as_pandas(
@@ -319,6 +325,7 @@ t = read_as_pandas(
 )
 t
 ```
+
 ```
       instance                  strategy interchange  colors
 0      graph_0             largest_first        True       6
@@ -335,6 +342,24 @@ t
 
 [1200 rows x 4 columns]
 ```
+
+## Which information is saved?
+
+The following information is saved automatically:
+
+- function name
+- all arguments that do not begin with "\_"
+- the returned values
+- runtime
+- current date and time
+- hostname
+- Python version
+- Python binary path
+- current working directory
+- stdout and stderr
+- all installed modules and their versions
+- git revision
+- path of the python file
 
 ## On doing good empirical evaluations of algorithms
 
@@ -399,6 +424,8 @@ git add .gitattributes
 
 # Version History
 
+- **0.2.0** Changing database slightly to contain meta data and doing more
+  caching. Saving some more information.
 - **0.1.3** Fixed bug in arg fingerprint set.
 - **0.1.2** Fixed bug with empty rows in pandas table.
 - **0.1.1** Fixed bug with `delete_if`.

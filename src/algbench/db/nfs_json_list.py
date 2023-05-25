@@ -167,4 +167,5 @@ class NfsJsonList:
         self.flush()
 
     def delete(self):
+        self._cache.clear()
         shutil.rmtree(self.path)

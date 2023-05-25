@@ -14,7 +14,9 @@ def test_simple():
 
     benchmark.compress()
     benchmark.delete_if(lambda entry: False)
+    n = 0
     for entry in benchmark:
         print(entry["parameters"], entry["data"])
-
+        n += 1
+    assert n == 3
     benchmark.delete()

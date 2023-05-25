@@ -3,7 +3,7 @@ from .fingerprint import fingerprint
 from .db import NfsJsonSet, NfsJsonDict, NfsJsonList
 from .environment import get_environment_info
 
-
+import json
 import os
 import typing
 
@@ -11,10 +11,20 @@ import typing
 class BenchmarkDb:
     def __init__(self, path) -> None:
         self.path = path
+        self._create_or_check_info_file()
         self._arg_fingerprints = NfsJsonSet(os.path.join(path, "arg_fingerprints"))
         self._arg_data = NfsJsonDict(os.path.join(path, "arg_dict"))
         self._data = NfsJsonList(os.path.join(path, "results"))
         self._env_data = NfsJsonDict(os.path.join(path, "env_info"))
+
+    def _create_or_check_info_file(self):
+        info_path = os.path.join(self.path, "algbench.json")
+        if os.path.exists(info_path):
+            pass
+        else:
+            os.makedirs(self.path, exist_ok=True)
+            with open(info_path, "w") as f:
+                json.dump({"version": "v0.2.0"}, f)
 
     def contains_fingerprint(self, fingerprint):
         return fingerprint in self._arg_fingerprints
