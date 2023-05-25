@@ -275,7 +275,6 @@ describe("./03_benchmark_data/")
 | environment: [{'name': 'virtualenv', 'path': '/home/krupke/.local/lib/python3.10/site-pack...
 | git_revision: 5357426feb4b49174c313ffa33e2cadf6a83e226
 | python_file: /home/krupke/Repositories/AlgBench/examples/graph_coloring/02_run_benchmark.py
-
 ```
 </details>
 
@@ -377,7 +376,6 @@ print(t)
 
 
 [6000 rows x 7 columns]
-
 ```
 </details>
 
