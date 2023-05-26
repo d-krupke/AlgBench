@@ -19,7 +19,7 @@ class NfsJsonSet:
     def add(self, item):
         item = to_json(item)
         if item not in self._values:
-            self._db.append([item], flush=False)
+            self._db.append([item])
             self._values.add(item)
         return item
 
@@ -43,9 +43,6 @@ class NfsJsonSet:
     def clear(self):
         self._db.clear()
         self._values.clear()
-
-    def flush(self):
-        self._db.flush()
 
     def delete(self):
         self._db.delete()

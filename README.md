@@ -487,6 +487,7 @@ git add .gitattributes
 
 # Version History
 
+- **1.1.0** Some changes for efficiency turned out to be less robust in case of, e.g., keyboard interrupt. Fixed that.
 - **1.0.0** Changing the database layout, making it more efficient (breaking
   change!).
 - **0.2.0** Changing database slightly to contain meta data and doing more

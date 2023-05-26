@@ -34,14 +34,11 @@ class NfsJsonDict:
         if key in self._values:
             if _equal(self._values[key], value):
                 return
-        self._db.append({key: value}, flush=False)
+        self._db.append({key: value})
         self._values[key] = value
 
     def __getitem__(self, key: str):
         return self._values[key]
-
-    def flush(self):
-        self._db.flush()
 
     def get(self, *args, **kwargs):
         return self._values.get(*args, **kwargs)

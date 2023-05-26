@@ -79,8 +79,11 @@ class BenchmarkDb:
     def __iter__(self):
         for entry in self._data:
             entry = entry.copy()
-            entry["env"] = self.get_env_info(entry["env_fingerprint"])
-            yield entry
+            try:
+                entry["env"] = self.get_env_info(entry["env_fingerprint"])
+                yield entry
+            except KeyError:
+                pass
 
     def front(self) -> typing.Optional[typing.Dict]:
         try:
