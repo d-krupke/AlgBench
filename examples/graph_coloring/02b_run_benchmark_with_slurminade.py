@@ -13,6 +13,7 @@ import networkx as nx
 
 # ---------------------
 import slurminade
+
 # ---------------------
 
 benchmark = Benchmark("03_benchmark_data")
@@ -29,6 +30,7 @@ slurminade.update_default_configuration(
 )
 slurminade.set_dispatch_limit(200)
 # ----------------------
+
 
 # ----------------------
 # distribute the following function
@@ -50,11 +52,14 @@ def load_instance_and_run(instance_name: str, alg_params):
 
     benchmark.add(eval_greedy_alg, instance_name, alg_params, g)
 
+
 # --------------------------
 # Compression is not thread-safe so we make it a separate function
 @slurminade.slurmify()
-def commpress():
+def compress():
     benchmark.compress()
+
+
 # --------------------------
 
 alg_params_to_evaluate = [
@@ -79,5 +84,5 @@ if __name__ == "__main__":
         for instance_name in instances:
             for conf in alg_params_to_evaluate:
                 load_instance_and_run.distribute(instance_name, conf)
-        commpress.wait_for(batch.flush()).distribute()  # after all runs finished
+        compress.wait_for(batch.flush()).distribute()  # after all runs finished
     # ----------------------

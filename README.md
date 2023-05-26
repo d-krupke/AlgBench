@@ -36,30 +36,59 @@ difficult and less efficient.
 
 ## Other things you should know about for empirical/experimental evaluations
 
-The following tools I consider essential for empirical evaluations (of algorithms):
+The following tools I consider essential for empirical evaluations (of
+algorithms):
 
-* [pandas](https://pandas.pydata.org/): Simple and powerful tool for working with data tables. Do your experiments and parse the important data into a pandas DataFrame.
-* [seaborn](https://seaborn.pydata.org/) and [matplotlib](https://matplotlib.org/): Creating beautiful plots from pandas DataFrames with little work.
-* [JupyterLab](https://jupyterlab.readthedocs.io/en/latest/): Interactive Python+Markdown documents. Great for analyzing data and sharing the insights. Works great with pandas and seaborn.
+- [pandas](https://pandas.pydata.org/): Simple and powerful tool for working
+  with data tables. Do your experiments and parse the important data into a
+  pandas DataFrame.
+- [seaborn](https://seaborn.pydata.org/) and
+  [matplotlib](https://matplotlib.org/): Creating beautiful plots from pandas
+  DataFrames with little work.
+- [JupyterLab](https://jupyterlab.readthedocs.io/en/latest/): Interactive
+  Python+Markdown documents. Great for analyzing data and sharing the insights.
+  Works great with pandas and seaborn.
 
-AlgBench essentially takes over the part of saving the information from the runs and allowing you to easily extract pandas DataFrames from it.
-For very simple studies, you could also directly save your data into a Pandas DataFrame but even for nearly every serious experiment, you run into the problems mentioned in the beginning.
+AlgBench essentially takes over the part of saving the information from the runs
+and allowing you to easily extract pandas DataFrames from it. For very simple
+studies, you could also directly save your data into a Pandas DataFrame but even
+for nearly every serious experiment, you run into the problems mentioned in the
+beginning.
 
-Note that the actual algorithms can also be writen in another, more efficient programming language.
-It is reasonably easy to create Python-bindings, e.g., for C++ with [PyBind11](https://pybind11.readthedocs.io/), or just call the binaries with Python.
+Note that the actual algorithms can also be written in another, more efficient
+programming language. It is reasonably easy to create Python-bindings, e.g., for
+C++ with [pybind11](https://pybind11.readthedocs.io/), or just call the binaries
+with Python.
 
-Publishable evaluations often require extensive experiments that are best performed on a cluster of shared workstations.
-Many institutes and companies are using [slurm](https://slurm.schedmd.com/documentation.html) to schedule and distribute the workloads.
-The data is usually shared via a network file system (NFS), for which AlgBench is designed.
-While you usually also have databases available, they are not made for just dumping all the data you may need for analyzis and potentially debugging into.
-We developed an additonal tool [slurminade](https://github.com/d-krupke/slurminade) that allows you to distribute your experiments with just a few additional lines.
-You can see this in an example: [original script](./examples/graph_coloring/02_run_benchmark.py) vs [script with slurminade](./examples/graph_coloring/02b_run_benchmark_with_slurminade.py).
+Publishable evaluations often require extensive experiments that are best
+performed on a cluster of shared workstations. Many institutes and companies are
+using [slurm](https://slurm.schedmd.com/documentation.html) to schedule and
+distribute the workloads. The data is usually shared via a network file system
+(NFS), for which AlgBench is designed. While you usually also have databases
+available, they are not made for just dumping all the data you may need for
+analyzis and potentially debugging into. We developed an additional tool
+[slurminade](https://github.com/d-krupke/slurminade) that allows you to
+distribute your experiments with just a few additional lines. You can see this
+in an example: [original script](./examples/graph_coloring/02_run_benchmark.py)
+vs
+[script with slurminade](./examples/graph_coloring/02b_run_benchmark_with_slurminade.py).
 
-Let me further recommend the books [A Guide To Experimental Algorithmics by Catherine McGeoch](https://www.cambridge.org/core/books/guide-to-experimental-algorithmics/CDB0CB718F6250E0806C909E1D3D1082) here that gives a good introduction into the big picture of performing empirical evluations for algorithms.
-If you want to know more about actually implementing complex algorithms for difficult problems, I recommend to read [In Pursuit of the Traveling Salesman by Bill Cook](https://press.princeton.edu/books/paperback/9780691163529/in-pursuit-of-the-traveling-salesman) or [The Traveling Salesman Problem: A Computational Study by Appelgate et al.](https://www.math.uwaterloo.ca/tsp/book/index.html) to really go into details.
-The Traveling Salesman Problem is an excellent example for this because it is probably had gotten the most attention of any NP-hard combinatorial problems.
-However, it can also be intimidating as you probably won't have the funds to look into any problem as deep as the Travelings Salesman Problem has been looked at.
-Maybe you want to read some papers from the SIAM Symposium on Algorithm Engineering and Experiments (ALENEX) to see how smaller studies can be performed (though, for most papers you will find aspects that could be improved).
+Let me further recommend the books
+[A Guide To Experimental Algorithmics by Catherine McGeoch](https://www.cambridge.org/core/books/guide-to-experimental-algorithmics/CDB0CB718F6250E0806C909E1D3D1082)
+here that gives a good introduction into the big picture of performing empirical
+evaluations for algorithms. If you want to know more about actually implementing
+complex algorithms for difficult problems, I recommend to read
+[In Pursuit of the Traveling Salesman by Bill Cook](https://press.princeton.edu/books/paperback/9780691163529/in-pursuit-of-the-traveling-salesman)
+or
+[The Traveling Salesman Problem: A Computational Study by Appelgate et al.](https://www.math.uwaterloo.ca/tsp/book/index.html)
+to really go into details. The Traveling Salesman Problem is an excellent
+example for this because it is probably had gotten the most attention of any
+NP-hard combinatorial problems. However, it can also be intimidating as you
+probably won't have the funds to look into any problem as deep as the Travelings
+Salesman Problem has been looked at. Maybe you want to read some papers from the
+SIAM Symposium on Algorithm Engineering and Experiments (ALENEX) to see how
+smaller studies can be performed (though, for most papers you will find aspects
+that could be improved).
 
 ## Installation
 
@@ -282,8 +311,8 @@ describe("./03_benchmark_data/")
 | n_colors: 9
  timestamp: 2023-05-25T21:58:39.201553
  runtime: 0.002952098846435547
- stdout: 
- stderr: 
+ stdout:
+ stderr:
  env_fingerprint: 53ad3b5b29d082d7e2bca6881ec9fe35fe441ae1
  args_fingerprint: 10ce65b7a61d5ecbfcb1f4e390d72122f7a1f6ec
  parameters:
@@ -389,7 +418,7 @@ print(t)
 
 ```
        instance                  strategy interchange  colors   runtime ...
-0       graph_0             largest_first        True       9  0.002952  
+0       graph_0             largest_first        True       9  0.002952
 1       graph_0             largest_first       False      10  0.000183
 2       graph_0         random_sequential        True       9  0.003562
 3       graph_0         random_sequential       False      12  0.000173
@@ -404,6 +433,7 @@ print(t)
 
 [6000 rows x 7 columns]
 ```
+
 </details>
 
 ## Which information is saved?
@@ -435,7 +465,14 @@ research questions and design corresponding workhorse studies to answer them.
 
 Here are some general hints:
 
-- Create a separate folder for every study.
+- Do not mix algorithm code and experiment code, even if it saves you rebuilding
+  your package after every change. Such a mixed setup may save you a command
+  line, but it is harder to log and many problems may remain unnoticed until you
+  try to publish your algorithm. The little overhead is worth it in the long
+  run.
+- Create a separate folder for every study. Don't mix too much because you want
+  to reduce redundancies: Once things become complicated, you may draw
+  conclusions from the wrong data without noticing.
 - Add a README.md into each folder that describes the study. At least describe
   in a sentence, who created this study when in which context.
 - Have separated, numerated files for preparing, running, processing, checking,
@@ -463,7 +500,7 @@ Run
 
 ```bash
 git lfs install
-````
+```
 
 to set up git LFS and
 
@@ -487,7 +524,8 @@ git add .gitattributes
 
 # Version History
 
-- **1.1.0** Some changes for efficiency turned out to be less robust in case of, e.g., keyboard interrupt. Fixed that.
+- **1.1.0** Some changes for efficiency turned out to be less robust in case of,
+  e.g., keyboard interrupt. Fixed that.
 - **1.0.0** Changing the database layout, making it more efficient (breaking
   change!).
 - **0.2.0** Changing database slightly to contain meta data and doing more

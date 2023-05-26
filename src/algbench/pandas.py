@@ -30,10 +30,18 @@ def describe(path: str):
     """
     Describe the benchmark by printing the first entry.
     """
+
+    print("An entry in the database can look like this:")
+    print("_____________________________________________")
     entry = Benchmark(path).front()
     if not entry:
         return
     _describe_data(entry, 0, 20, 5)
+    print("______________________________________________")
+    print(
+        "Note that this is only based on the first entry,"
+        " other entries could differ."
+    )
 
 
 def read_as_pandas(

@@ -3,6 +3,7 @@ import networkx as nx
 import json
 import functools
 
+
 class InstanceDb:
     """
     Simple helper to store and load the instances.

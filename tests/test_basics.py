@@ -1,4 +1,4 @@
-from algbench.benchmark import Benchmark
+from algbench import Benchmark, describe
 
 
 def test_simple():
@@ -19,4 +19,6 @@ def test_simple():
         print({k: v for k, v in entry.items() if k != "env"})
         n += 1
     assert n == 3
+
+    describe("./test_benchmark")
     benchmark.delete()
