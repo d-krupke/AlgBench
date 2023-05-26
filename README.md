@@ -34,6 +34,33 @@ There is a predecessor project, called
 data easy, but required more boilerplate code and reading the data was more
 difficult and less efficient.
 
+## Other things you should know about for empirical/experimental evaluations
+
+The following tools I consider essential for empirical evaluations (of algorithms):
+
+* [pandas](https://pandas.pydata.org/): Simple and powerful tool for working with data tables. Do your experiments and parse the important data into a pandas DataFrame.
+* [seaborn](https://seaborn.pydata.org/) and [matplotlib](https://matplotlib.org/): Creating beautiful plots from pandas DataFrames with little work.
+* [JupyterLab](https://jupyterlab.readthedocs.io/en/latest/): Interactive Python+Markdown documents. Great for analyzing data and sharing the insights. Works great with pandas and seaborn.
+
+AlgBench essentially takes over the part of saving the information from the runs and allowing you to easily extract pandas DataFrames from it.
+For very simple studies, you could also directly save your data into a Pandas DataFrame but even for nearly every serious experiment, you run into the problems mentioned in the beginning.
+
+Note that the actual algorithms can also be writen in another, more efficient programming language.
+It is reasonably easy to create Python-bindings, e.g., for C++ with [PyBind11](https://pybind11.readthedocs.io/), or just call the binaries with Python.
+
+Publishable evaluations often require extensive experiments that are best performed on a cluster of shared workstations.
+Many institutes and companies are using [slurm](https://slurm.schedmd.com/documentation.html) to schedule and distribute the workloads.
+The data is usually shared via a network file system (NFS), for which AlgBench is designed.
+While you usually also have databases available, they are not made for just dumping all the data you may need for analyzis and potentially debugging into.
+We developed an additonal tool [slurminade](https://github.com/d-krupke/slurminade) that allows you to distribute your experiments with just a few additional lines.
+You can see this in an example: [original script](./examples/graph_coloring/02_run_benchmark.py) vs [script with slurminade](./examples/graph_coloring/02b_run_benchmark_with_slurminade.py).
+
+Let me further recommend the books [A Guide To Experimental Algorithmics by Catherine McGeoch](https://www.cambridge.org/core/books/guide-to-experimental-algorithmics/CDB0CB718F6250E0806C909E1D3D1082) here that gives a good introduction into the big picture of performing empirical evluations for algorithms.
+If you want to know more about actually implementing complex algorithms for difficult problems, I recommend to read [In Pursuit of the Traveling Salesman by Bill Cook](https://press.princeton.edu/books/paperback/9780691163529/in-pursuit-of-the-traveling-salesman) or [The Traveling Salesman Problem: A Computational Study by Appelgate et al.](https://www.math.uwaterloo.ca/tsp/book/index.html) to really go into details.
+The Traveling Salesman Problem is an excellent example for this because it is probably had gotten the most attention of any NP-hard combinatorial problems.
+However, it can also be intimidating as you probably won't have the funds to look into any problem as deep as the Travelings Salesman Problem has been looked at.
+Maybe you want to read some papers from the SIAM Symposium on Algorithm Engineering and Experiments (ALENEX) to see how smaller studies can be performed (though, for most papers you will find aspects that could be improved).
+
 ## Installation
 
 You can install AlgBench using pip

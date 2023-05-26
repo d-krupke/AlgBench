@@ -1,20 +1,39 @@
 """
-Run the actual benchmark.
+This is a slightly modified version of `02_run_benchmark.py` that
+uses slurminade to distribute the execution in a slurm environment.
 
-You can run it multiple times, but it will only execute
-the missing configurations. This does not save much time
-here but when you have to deal with algorithms that
-run for minutes, it is a life saver.
+This script will also work without a slurm environment.
+
+THIS IS JUST FOR COMPARISON AND NOT AN ACTUAL PART OF THE EXAMPLE STUDY.
 """
 
 from _utils import InstanceDb
 from algbench import Benchmark
 import networkx as nx
 
+# ---------------------
+import slurminade
+# ---------------------
+
 benchmark = Benchmark("03_benchmark_data")
 instances = InstanceDb("./01_instances.zip")
 
+# ---------------------
+# this is just my slurm configuration, you would have to change it.
+# Your admin will probably tell you what to insert here.
+slurminade.update_default_configuration(
+    partition="alg",
+    constraint="alggen03",
+    mail_user="my_mail@supermail.com",
+    mail_type="ALL",
+)
+slurminade.set_dispatch_limit(200)
+# ----------------------
 
+# ----------------------
+# distribute the following function
+@slurminade.slurmify()
+# ----------------------
 def load_instance_and_run(instance_name: str, alg_params):
     # load the instance outside the actual measurement
     g = instances[instance_name]
@@ -31,6 +50,12 @@ def load_instance_and_run(instance_name: str, alg_params):
 
     benchmark.add(eval_greedy_alg, instance_name, alg_params, g)
 
+# --------------------------
+# Compression is not thread-safe so we make it a separate function
+@slurminade.slurmify()
+def commpress():
+    benchmark.compress()
+# --------------------------
 
 alg_params_to_evaluate = [
     {"strategy": "largest_first", "interchange": True},
@@ -48,8 +73,11 @@ alg_params_to_evaluate = [
 ]
 
 if __name__ == "__main__":
-    for instance_name in instances:
-        print(instance_name)
-        for conf in alg_params_to_evaluate:
-            load_instance_and_run(instance_name, conf)
-    benchmark.compress()
+    # ------------------------
+    # tiny changes here
+    with slurminade.Batch(100) as batch:  # combine up to 50 calls into into one task
+        for instance_name in instances:
+            for conf in alg_params_to_evaluate:
+                load_instance_and_run.distribute(instance_name, conf)
+        commpress.wait_for(batch.flush()).distribute()  # after all runs finished
+    # ----------------------
