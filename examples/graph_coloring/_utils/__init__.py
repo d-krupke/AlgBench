@@ -32,3 +32,9 @@ class InstanceDb:
         with ZipFile(self.path, "r") as z:
             for f in z.filelist:
                 yield f.filename[:-5]
+
+# If you write a paper about your study, you want to use
+# a uniform with for your plots. Find out, what the optimal
+# width is and save it here to be shared for all notebooks.
+PLOT_DOC_FULL_WIDTH = 10  # full width plot
+PLOT_DOC_HALF_WIDTH = 4.5  # two plots in a row

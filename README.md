@@ -103,6 +103,58 @@ pip install -U algbench
 There is one important class `Benchmark` to run the benchmark, and two important
 functions `describe` and `read_as_pandas` to analyze the results.
 
+1. Create a function that creates an entry in the database.
+  Name all arguments that should be saved and used for identifying entries without `_` in the front.
+  They should be JSON-compatible.
+  Name all arguments that provide higher objects, such as the instance database, with an `_` in the front to tell *algbench* not to try to save or compare them.
+  Return everything you want to be saved for the benchmark, best as a dictionary.
+  ```python
+  def create_benchmark_entry(instance_name: str, # instance identifier for the database
+                              alg_parameters: dict,  # readable parameters for the algorithm
+                              _instance  # the parsed instance (not to be added to the database)
+                              ):
+      solution = alg(_instance, **alg_parameters)
+      return {
+        "objective_value": solution.obj()
+      }
+  ```
+2. Create a `Benchmark`-object by passing it a path for the database.
+  ```python
+  from algbench import Benchmark
+
+  benchmark = Benchmark("./my_benchmark")
+  ```
+3. Use `Benchmark.add` to the function for all missing entries.
+  ```python
+  for instance_name, instance in instance_db:
+    for params in params_to_compare:
+      benchmark.add(create_benchmark_entry,  # function (could also be a lambda)
+      # arguments for function
+       instance_name=instance_name, alg_parameters=params, _instance=instance)
+  benchmark.compress()  # reduce the size of the database by file compression
+  ```
+4. Use a for loop to iterate over all raw entries 
+  ```python
+  benchmark = Benchmark("./my_benchmark")
+  for entry in benchmark:
+    print(entry)  # dictionary
+  ```
+  or `read_as_pandas` to extract a simple pandas table
+  ```python
+  t = read_as_pandas(
+      "./my_benchmark/",
+      lambda result: {
+          "instance": result["parameters"]["args"]["instance_name"],
+          "alg_params": result["parameters"]["args"]["alg_params"],
+          "obj": result["result"]["objective_value"],
+          "runtime": result["runtime"],  # automatically saved
+      },
+  )
+  ```
+  You can use `describe("./my_benchmark")` to get an overview of the available entries.
+
+The `Benchmark` clas provides further functionallity, as documented below, e.g., for deleting selected entries or reparing a broken database.
+
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -441,7 +493,7 @@ print(t)
 The following information is saved automatically:
 
 - function name
-- all arguments that do not begin with "\_"
+- all arguments that do not begin with "\_" (use this to pass parsed instances etc.)
 - the returned values
 - runtime
 - current date and time
@@ -453,6 +505,14 @@ The following information is saved automatically:
 - all installed modules and their versions
 - git revision
 - path of the python file
+
+## Things to be aware of
+
+- Only function name and arguments not starting with "_" are used to compare entries. If an argument (or part of it) is not JSON-compatible, the string of it is used.
+- Arguments and return values that cannot be translated to json are converted to string in the database. The default string conversion may not be very useful.
+- The stdout/strerr capturing only works if Python's stdout/stderr are used. E.g., C++ write by default to the system's stdout/stderr and cannot be captured (if you have been wondering, why C++-modules have a bad output it Jupyter-notebooks: this is the reason). PyBind11 allows you [to change that behavior](https://pybind11.readthedocs.io/en/stable/advanced/pycpp/utilities.html#using-python-s-print-function-in-c).
+- Global variables are not saved. Try to pass all important parameters as function arguments, as they can also alter the benchmark and are important to distinguish entries (e.g., you would want to recompute an entry if the timelimit has been changed. This is only possible if you tell algbench this by making it an argument).
+- 'sys.argv' and the filename are saved, but not used for distinguishing entries.
 
 ## On doing good empirical evaluations of algorithms
 
