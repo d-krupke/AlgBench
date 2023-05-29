@@ -5,10 +5,10 @@ best. It is meant as an example for AlgBench and the general structure of a good
 study.
 
 Graph coloring is an NP-hard problem that appears as subproblem in many
-contexts. You can find more information on in on
-[Wikipedia](https://en.wikipedia.org/wiki/Graph_coloring)
+contexts. You can find more information on it on
+[Wikipedia](https://en.wikipedia.org/wiki/Graph_coloring).
 
-The documentation of NetworkX greedy heuristics for it, can be found
+The documentation of NetworkX greedy heuristics for it can be found
 [here](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.coloring.greedy_color.html#networkx.algorithms.coloring.greedy_color).
 
 ## Overview
@@ -34,3 +34,4 @@ The documentation of NetworkX greedy heuristics for it, can be found
   of the benchmark to evaluate.
 - [08_analyze_runtime.ipynb](./08_analyze_runtime.ipynb) thus, we analyze the runtime in more detail here
 - [09_analyze_quality.ipynb](./09_analyze_quality.ipynb) and the solution quality here
+

@@ -29,3 +29,10 @@ benchmark.delete()
 # flake8: noqa F401
 from .benchmark import Benchmark
 from .pandas import read_as_pandas, describe
+
+# Add __version__ variable from package information.
+from pkg_resources import get_distribution, DistributionNotFound
+try:
+    __version__ = get_distribution(__name__).version
+except DistributionNotFound:
+    pass  # package is not installed
