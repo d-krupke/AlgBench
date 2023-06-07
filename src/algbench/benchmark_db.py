@@ -1,12 +1,12 @@
-import shutil
-from .fingerprint import fingerprint
-from .db import NfsJsonSet, NfsJsonDict, NfsJsonList
-from .environment import get_environment_info
-
 import json
 import os
-import typing
+import shutil
 import sys
+import typing
+
+from .db import NfsJsonDict, NfsJsonList, NfsJsonSet
+from .environment import get_environment_info
+from .fingerprint import fingerprint
 
 
 class BenchmarkDb:
@@ -20,12 +20,11 @@ class BenchmarkDb:
     def _create_or_check_info_file(self):
         info_path = os.path.join(self.path, "algbench.json")
         if os.path.exists(info_path):
-            with open(info_path, "r") as f:
+            with open(info_path) as f:
                 info = json.load(f)
                 if info.get("version", "v0.0.0")[1] == "0":
-                    raise RuntimeError(
-                        "Incompatible database of old version of AlgBench."
-                    )
+                    msg = "Incompatible database of old version of AlgBench."
+                    raise RuntimeError(msg)
         else:
             os.makedirs(self.path, exist_ok=True)
             with open(info_path, "w") as f:

@@ -7,8 +7,9 @@ import socket
 import subprocess
 import sys
 import typing
-import pkg_resources
+
 import __main__
+import pkg_resources
 
 __cached = None
 

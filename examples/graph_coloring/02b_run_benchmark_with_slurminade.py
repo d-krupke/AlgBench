@@ -7,12 +7,13 @@ This script will also work without a slurm environment.
 THIS IS JUST FOR COMPARISON AND NOT AN ACTUAL PART OF THE EXAMPLE STUDY.
 """
 
-from _utils import InstanceDb
-from algbench import Benchmark
 import networkx as nx
 
 # ---------------------
 import slurminade
+from _utils import InstanceDb
+
+from algbench import Benchmark
 
 # ---------------------
 

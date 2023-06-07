@@ -1,4 +1,5 @@
 import hashlib
+
 from .db.json_serializer import to_json_str
 
 

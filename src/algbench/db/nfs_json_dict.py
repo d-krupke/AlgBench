@@ -1,8 +1,8 @@
-from .nfs_json_list import NfsJsonList
+import json
+import typing
 
 from .json_serializer import to_json
-import typing
-import json
+from .nfs_json_list import NfsJsonList
 
 
 def _equal(a, b):
@@ -12,17 +12,15 @@ def _equal(a, b):
 class NfsJsonDict:
     def __init__(self, path) -> None:
         self._db = NfsJsonList(path)
-        self._values: typing.Dict = dict()
+        self._values: typing.Dict = {}
         self.load()
 
     def load(self):
         data = self._db.load()
         for d in data:
             if not isinstance(d, dict):
-                raise ValueError(
-                    "Found data that is not a dict. "
-                    "Are you sure this is a NfsJsonDict-database?"
-                )
+                msg = "Found data that is not a dict. Are you sure this is a NfsJsonDict-database?"
+                raise ValueError(msg)
             self._values.update(d)
 
     def __contains__(self, item: str):
@@ -31,9 +29,8 @@ class NfsJsonDict:
     def __setitem__(self, key: str, value):
         key = str(key)
         value = to_json(value)
-        if key in self._values:
-            if _equal(self._values[key], value):
-                return
+        if key in self._values and _equal(self._values[key], value):
+            return
         self._db.append({key: value})
         self._values[key] = value
 
@@ -47,8 +44,7 @@ class NfsJsonDict:
         return self._values.update(*args, **kwargs)
 
     def items(self):
-        for key, value in self._values.items():
-            yield key, value
+        yield from self._values.items()
 
     def compress(self):
         self.load()  # in case there have been writes in the meantime

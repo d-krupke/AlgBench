@@ -31,7 +31,9 @@ from .benchmark import Benchmark
 from .pandas import read_as_pandas, describe
 
 # Add __version__ variable from package information.
+# https://packaging-guide.openastronomy.org/en/latest/minimal.html#my-package-init-py
 from pkg_resources import get_distribution, DistributionNotFound
+
 try:
     __version__ = get_distribution(__name__).version
 except DistributionNotFound:

@@ -1,15 +1,16 @@
-from contextlib import redirect_stderr, redirect_stdout
 import datetime
-import io
 import inspect
+import io
 import traceback
-import yaml
 import typing
+from contextlib import redirect_stderr, redirect_stdout
+
+import yaml
 
 from .benchmark_db import BenchmarkDb
-from .utils import Timer
-from .fingerprint import fingerprint
 from .db.json_serializer import to_json
+from .fingerprint import fingerprint
+from .utils import Timer
 
 
 class Benchmark:
@@ -81,12 +82,11 @@ class Benchmark:
         try:
             stdout = io.StringIO()
             stderr = io.StringIO()
-            with redirect_stdout(stdout):
-                with redirect_stderr(stderr):
-                    timestamp = datetime.datetime.now().isoformat()
-                    timer = Timer()
-                    result = func(*args, **kwargs)
-                    runtime = timer.time()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                timestamp = datetime.datetime.now().isoformat()
+                timer = Timer()
+                result = func(*args, **kwargs)
+                runtime = timer.time()
             self._db.add(
                 arg_fingerprint=fingp,
                 arg_data=arg_data,

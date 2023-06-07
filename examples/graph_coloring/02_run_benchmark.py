@@ -7,9 +7,10 @@ here but when you have to deal with algorithms that
 run for minutes, it is a life saver.
 """
 
-from _utils import InstanceDb
-from algbench import Benchmark
 import networkx as nx
+from _utils import InstanceDb
+
+from algbench import Benchmark
 
 benchmark = Benchmark("03_benchmark_data")
 instances = InstanceDb("./01_instances.zip")

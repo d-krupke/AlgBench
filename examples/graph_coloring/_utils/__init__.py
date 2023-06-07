@@ -1,7 +1,8 @@
-from zipfile import ZipFile, ZIP_LZMA
-import networkx as nx
-import json
 import functools
+import json
+from zipfile import ZIP_LZMA, ZipFile
+
+import networkx as nx
 
 
 class InstanceDb:
@@ -16,9 +17,8 @@ class InstanceDb:
 
     @functools.lru_cache(10)
     def __getitem__(self, name):
-        with ZipFile(self.path, "r") as z:
-            with z.open(name + ".json", "r") as f:
-                return nx.json_graph.node_link.node_link_graph(json.load(f))
+        with ZipFile(self.path, "r") as z, z.open(name + ".json", "r") as f:
+            return nx.json_graph.node_link.node_link_graph(json.load(f))
 
     def __setitem__(self, name, graph):
         self.__getitem__.cache_clear()
@@ -32,6 +32,7 @@ class InstanceDb:
         with ZipFile(self.path, "r") as z:
             for f in z.filelist:
                 yield f.filename[:-5]
+
 
 # If you write a paper about your study, you want to use
 # a uniform with for your plots. Find out, what the optimal

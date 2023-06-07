@@ -1,18 +1,17 @@
-from .json_serializer import to_json
-import logging
-
-
-import shutil
 import datetime
 import json
+import logging
 import os
 import os.path
 import pathlib
 import random
+import shutil
 import socket
 import typing
 import zipfile
 from zipfile import ZipFile
+
+from .json_serializer import to_json
 
 _log = logging.getLogger("AlgBench")
 
@@ -30,10 +29,8 @@ class NfsJsonList:
             os.makedirs(path, exist_ok=True)
             _log.info(f"Created new database '{path}'.")
         if os.path.isfile(path):
-            raise RuntimeError(
-                f"Cannot create database {path} because there "
-                "exists an equally named file."
-            )
+            msg = f"Cannot create database {path} because there exists an equally named file."
+            raise RuntimeError(msg)
         self._subfile_path: typing.Union[str, pathlib.Path] = self._get_unique_name()
         self._cache: typing.List = []
 
@@ -42,7 +39,8 @@ class NfsJsonList:
         Generate a unique file name to prevent collisions of parallel processes.
         """
         if _tries <= 0:
-            raise RuntimeError("Could not generate a unique file name. This is odd.")
+            msg = "Could not generate a unique file name. This is odd."
+            raise RuntimeError(msg)
         hostname = socket.gethostname()
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M")
         rand = random.randint(0, 10000)
@@ -93,14 +91,15 @@ class NfsJsonList:
                 f.write(json.dumps(data) + "\n")
             _log.info(f"Wrote {len(self._cache)} entries to disk.")
         if os.path.getsize(path) <= 0:
-            raise RuntimeError("Could not write to disk. Resulting file has zero size.")
+            msg = "Could not write to disk. Resulting file has zero size."
+            raise RuntimeError(msg)
         if not os.path.isfile(path):
-            raise RuntimeError("Could not write to disk for unknown reasons.")
+            msg = "Could not write to disk for unknown reasons."
+            raise RuntimeError(msg)
         self._cache.clear()
 
     def iter_cache(self):
-        for entry in self._cache:
-            yield entry
+        yield from self._cache
 
     def iter_compressed(self):
         compr_path = os.path.join(self.path, "_compressed.zip")
@@ -125,7 +124,7 @@ class NfsJsonList:
             path = os.path.join(self.path, fp)
             if not os.path.isfile(path) or not path.endswith(".data"):
                 continue
-            with open(path, "r") as f:
+            with open(path) as f:
                 for entry in f.readlines():
                     try:
                         entry_ = json.loads(entry)

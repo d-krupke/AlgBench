@@ -1,5 +1,7 @@
 import typing
+
 import pandas as pd
+
 from .benchmark import Benchmark
 
 

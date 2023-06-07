@@ -1,6 +1,7 @@
+import typing
+
 from .json_serializer import to_json
 from .nfs_json_list import NfsJsonList
-import typing
 
 
 class NfsJsonSet:
@@ -28,8 +29,7 @@ class NfsJsonSet:
             self.add(item)
 
     def __iter__(self):
-        for item in self._values:
-            yield item
+        yield from self._values
 
     def compress(self):
         """

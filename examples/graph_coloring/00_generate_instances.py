@@ -4,9 +4,10 @@ It is important to save the instances so other people
 can verify the results in the future.
 """
 
-import networkx as nx
-import random
 import os
+import random
+
+import networkx as nx
 from _utils import InstanceDb
 
 if __name__ == "__main__":
