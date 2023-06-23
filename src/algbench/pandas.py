@@ -52,7 +52,27 @@ def read_as_pandas(
     """
     Read the benchmark as pandas table.
     For this, you have to tell the function, which data should
-    go into which row.
+    go into which column.
+
+    An example could look like this:
+
+    .. code-block:: python
+
+        t = read_as_pandas(
+            "./03_benchmark_data/",
+            lambda result: {
+                "instance": result["parameters"]["args"]["instance_name"],
+                "strategy": result["parameters"]["args"]["alg_params"]["strategy"],
+                "interchange": result["parameters"]["args"]["alg_params"].get(
+                    "interchange", None
+                ),
+                "colors": result["result"]["n_colors"],
+                "runtime": result["runtime"],
+                "num_vertices": result["result"]["num_vertices"],
+                "num_edges": result["result"]["num_edges"],
+            },
+        )
+
     """
     data: typing.Dict[str, list] = {}
     n = 0

@@ -67,8 +67,9 @@ class Benchmark:
         Use this function to check if an entry already exist and thus
         does not have to be run again. If you want to have multiple
         samples, add a sample index argument.
+
         Caveat: This function may have false negatives. i.e., says that it
-          does not exist despite it existing (only for fresh data).
+        does not exist despite it existing (only for fresh data).
         """
         fingp, _ = self._get_arg_data(func, args, kwargs)
         return self._db.contains_fingerprint(fingp)

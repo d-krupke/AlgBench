@@ -168,8 +168,8 @@ t = read_as_pandas(
 You can use `describe("./my_benchmark")` to get an overview of the available
 entries.
 
-The `Benchmark` class provides further functionality, as documented below,
-e.g., for deleting selected entries or reparing a broken database.
+The `Benchmark` class provides further functionality, as documented below, e.g.,
+for deleting selected entries or reparing a broken database.
 
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
