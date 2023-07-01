@@ -583,6 +583,7 @@ to pass a logger to the algorithm. This allows you to create a
 separate logger for each context to separate the logs.
 
 ::
+   
    Note that AlgBench v2 automatically adds the runtime to print statments and log entries.
 
 Using Git LFS for the data
