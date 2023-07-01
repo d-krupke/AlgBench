@@ -154,6 +154,13 @@ results.
 
    benchmark = Benchmark("./my_benchmark")
 
+   # Optionally if logging is used):
+   import logging
+
+   # Configure with logger should be captured and with which level
+   benchmark.capture_logger("my_alg", logging.INFO)
+   benchmark.capture_logger("my_alg.submodule", logging.WARNING)
+
 3. Use ``Benchmark.add`` to the function for all missing entries.
 
 .. code:: python
@@ -315,7 +322,7 @@ Output:
    | environment: [{'name': 'virtualenv', 'path': '/home/krupke/.local/lib/python3.10/site-pack...
    | git_revision: 5357426feb4b49174c313ffa33e2cadf6a83e226
    | python_file: /home/krupke/Repositories/AlgBench/examples/graph_coloring/02_run_benchmark.py
-   
+
 
 
 
@@ -503,6 +510,81 @@ Here are some general hints:
    paper and half a year later, when you receive the reviews and want to
    do some changes, you have to find the code that generated them.
 
+
+On gaining more insights using logging
+---------------------------------------
+
+If you develop complex algorithms, you often want to not only measure
+the runtime of thw whole algorithm, but also of its parts, as well as
+other information, such as the number of iterations, the current
+solution, etc. You can use the Python logging framework for this. The
+logging framework allows you to create loggers that can be configured
+individually. You can also create a logger for each module and
+submodule, and configure them individually. You can also configure
+handlers for the loggers, e.g., to write them to a file or to the
+console. You can also configure the level of the loggers and handlers,
+such that you can easily switch between different levels of logging.
+AlgBench allows you to capture the loggers and save them to the
+database. You can then extract them and analyze them.
+
+You can also use simple ``print`` statements, but they are not as
+flexible as the logging framework. While AlgBench can actually
+add the runtime to the print statements, it is not as easy to
+configure the output as with the logging framework. There is no
+way to disable the output for individual parts of your algorithm,
+or to change the level of the output. The logging framework is
+as easy to use as print statements, but much more flexible.
+It can be more expensive, but ``print`` statements are also not
+free and should be used with care.
+
+Here is an example for using the logging framework:
+
+.. code:: python
+
+   import logging
+
+
+   def my_alg():
+       logger = logging.getLogger("my_alg")
+       logger.info("Starting my_alg")
+       # do something
+       logger.info("Finished my_alg")
+
+
+   logger = logging.getLogger("my_alg")
+   logger.setLevel(logging.INFO)
+   logger.addHandler(logging.StreamHandler())
+   my_alg()
+
+A further advantage of the logging framework is that you can separate
+the message structure from the data. This allows you to easily query
+for specific events and directly extract the data you want to analyze.
+
+.. code:: python
+   logger.info("Submodule X needed %d iterations", 42)
+
+Will be saved as a dictionary with a separate field for the message and
+the data:
+
+::
+
+   {
+       "msg": "Submodule X needed %d iterations",
+       "args": [42],
+   }
+
+A further alternative is to use a dedicated class for stats that you
+pass around. This is generally a good idea, but takes more work and
+requires you to change the code. The logging framework is a good
+compromise between flexibility and ease of use.
+
+If your algorithm may be run in parallel or different contexts, you may want to allow
+to pass a logger to the algorithm. This allows you to create a
+separate logger for each context to separate the logs.
+
+::
+   Note that AlgBench v2 automatically adds the runtime to print statments and log entries.
+
 Using Git LFS for the data
 --------------------------
 
@@ -541,6 +623,10 @@ Finally, add ``.gitattributes`` to git via
 Version History
 ===============
 
+- **2.0.0** Extensive change of stdout/stderr handling and new logging functionality.
+   By default, stdout and stderr will now be saved with the runtime of the function.
+   Additionally, you can now capture loggers of the Python logging framework and save them to the database.
+   This is especially useful if you use a library that uses the logging framework. Prefere ``logging`` over ``print`` for logging information.
 -  **1.1.0** Some changes for efficiency turned out to be less robust in
    case of, e.g., keyboard interrupt. Fixed that.
 -  **1.0.0** Changing the database layout, making it more efficient

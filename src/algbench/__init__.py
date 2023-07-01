@@ -30,6 +30,7 @@ the usual boilerplate code.
 # flake8: noqa F401
 from .benchmark import Benchmark
 from .pandas import read_as_pandas, describe
+from .log_capture import JsonLogHandler, JsonLogCapture
 
 # Add __version__ variable from package information.
 # https://packaging-guide.openastronomy.org/en/latest/minimal.html#my-package-init-py
@@ -40,4 +41,10 @@ try:
 except DistributionNotFound:
     pass  # package is not installed
 
-__all__ = ["Benchmark", "read_as_pandas", "describe"]
+__all__ = [
+    "Benchmark",
+    "read_as_pandas",
+    "describe",
+    "JsonLogHandler",
+    "JsonLogCapture",
+]
