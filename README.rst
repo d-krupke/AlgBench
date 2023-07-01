@@ -561,6 +561,7 @@ the message structure from the data. This allows you to easily query
 for specific events and directly extract the data you want to analyze.
 
 .. code:: python
+   
    logger.info("Submodule X needed %d iterations", 42)
 
 Will be saved as a dictionary with a separate field for the message and
@@ -583,7 +584,7 @@ to pass a logger to the algorithm. This allows you to create a
 separate logger for each context to separate the logs.
 
 ::
-   
+
    Note that AlgBench v2 automatically adds the runtime to print statments and log entries.
 
 Using Git LFS for the data
