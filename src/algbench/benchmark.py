@@ -4,6 +4,7 @@ import io
 import logging
 import traceback
 import typing
+import sys
 from contextlib import ExitStack, redirect_stderr, redirect_stdout
 
 import yaml
@@ -12,7 +13,7 @@ from .benchmark_db import BenchmarkDb
 from .db.json_serializer import to_json
 from .fingerprint import fingerprint
 from .log_capture import JsonLogCapture, JsonLogHandler
-from .stream_with_time import StreamWithTime
+from ._stream_utils import StreamWithTime, PrintingStringIO, NotSavingIO
 from .utils import Timer
 
 
@@ -26,6 +27,7 @@ class Benchmark:
     `run`. This may be advised if you want to distribute the execution.
 
     The following functions are thread-safe:
+
     - exists
     - run
     - add
@@ -39,7 +41,7 @@ class Benchmark:
     running. It could lead to data loss.
     """
 
-    def __init__(self, path: str, save_output_with_time: bool = True) -> None:
+    def __init__(self, path: str, save_output: bool = True, hide_output: bool = True, save_output_with_time: bool = True) -> None:
         """
         Just specify the path of where to put the
         database and everything else happens magically.
@@ -47,12 +49,31 @@ class Benchmark:
         databases, as they will get mixed.
 
         :param path: The path to the database.
+        :param save_output: If true, all output (stdout and stderr) will be
+            saved. If set to false, the output will be discarded. This is
+            useful if you have a lot of output and don't want to waste disk
+            space. However, you will not be able to see the output of the
+            algorithm afterwards. Note that the output can only be saved if
+            the code aquires the Python sys.stdout and sys.stderr streams
+            during the execution, as the corresponding streams are replaced
+            by the benchmark. Normal ``print`` statements do so, but
+            ``logging.StreamHandler`` does not. For the latter, use
+            ``Benchmark.capture_logger``.
+        :param hide_output: If true, all output (stdout and stderr) will be
+            hidden. This is useful if you have a lot of output and don't want
+            to clutter your console. However, you will not be able to see the
+            output of the algorithm while it is running. Code the aquired handles
+            to the Python sys.stdout and sys.stderr streams earlier will still be
+            able to print to the console, as they circumvent the replacement.
         :param save_output_with_time: If true, all output (stdout and stderr)
             will be saved with the time it was written. This gives you more
             insights on the runtime of the algorithm, but also increases the
-            size of the database.
+            size of the database. This option is ignored if `save_output` is
+            set to false.
         """
         self._db = BenchmarkDb(path)
+        self._save_output = save_output
+        self._hide_output = hide_output
         self._save_output_with_time = save_output_with_time
         self._log_captures = {}
 
@@ -114,14 +135,18 @@ class Benchmark:
         fingp, _ = self._get_arg_data(func, args, kwargs)
         return self._db.contains_fingerprint(fingp)
 
-    def _get_stream_obj(self):
+    def _get_stream_obj(self, forward_stream):
+        if not self._save_output:
+            # This wrapper just adds a ``getvalue`` method to the stream,
+            # so it can be used drop-in for StringIO.
+            return NotSavingIO(forward_stream)
         if self._save_output_with_time:
             # SteamWithTime is a wrapper around StringIO.
             # It stores the time of each line.
             # getvalue() returns a list of tuples (time, line).
-            return StreamWithTime()
+            return StreamWithTime(forward_stream)
         else:
-            return io.StringIO()
+            return PrintingStringIO(forward_stream)
 
     def run(self, func: typing.Callable, *args, **kwargs):
         """
@@ -133,8 +158,8 @@ class Benchmark:
         """
         fingp, arg_data = self._get_arg_data(func, args, kwargs)
         try:
-            stdout = self._get_stream_obj()
-            stderr = self._get_stream_obj()
+            stdout = self._get_stream_obj(sys.stdout if not self._hide_output else None)
+            stderr = self._get_stream_obj(sys.stderr if not self._hide_output else None)
             with ExitStack() as logging_stack:
                 log_handler = JsonLogHandler()
                 for logger_name, level in self._log_captures.items():

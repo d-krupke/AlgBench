@@ -625,6 +625,7 @@ Finally, add ``.gitattributes`` to git via
 Version History
 ===============
 
+- **2.1.0** More flexible stream handling. You can now disable the output saving and hidding. The default behavior still is to save the output with time stamps and hide it from the console.
 - **2.0.0** Extensive change of stdout/stderr handling and new logging functionality.
    By default, stdout and stderr will now be saved with the runtime of the function.
    Additionally, you can now capture loggers of the Python logging framework and save them to the database.
