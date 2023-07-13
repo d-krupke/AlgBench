@@ -5,8 +5,9 @@ and store it in the database.
 """
 
 
-from typing import Iterable, List, Tuple
 import io
+from typing import List, Tuple
+
 from .utils import Timer
 
 

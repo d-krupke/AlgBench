@@ -1,6 +1,7 @@
-
 import logging
-from algbench import JsonLogHandler, JsonLogCapture
+
+from algbench import JsonLogCapture, JsonLogHandler
+
 
 def test_logger_basics():
     logger = logging.getLogger("test_logger")
@@ -10,6 +11,7 @@ def test_logger_basics():
     logger.info("test")
     assert len(json_log.get_entries()) == 1
     print(json_log.get_entries())
+
 
 def test_log_catcher():
     logger = logging.getLogger("test_logger")

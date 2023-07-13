@@ -6,8 +6,10 @@ dictionaries. You don't need to use this code directly. Use the
 
 import logging
 from typing import Optional
+
 from .db.json_serializer import to_json
 from .utils import Timer
+
 
 class JsonLogHandler(logging.Handler):
     """
@@ -15,16 +17,16 @@ class JsonLogHandler(logging.Handler):
     dictionaries.
     """
 
-    def __init__(self, level = logging.NOTSET) -> None:
+    def __init__(self, level=logging.NOTSET) -> None:
         """
         :param level: The level of the logger to catch.
         """
         super().__init__(level)
         self._log = []
-        self._timer= Timer()
+        self._timer = Timer()
 
     def emit(self, record: logging.LogRecord) -> None:
-        data = dict()
+        data = {}
         data.update(record.__dict__)
         data["runtime"] = self._timer.time()
         self._log.append(to_json(data))
@@ -36,12 +38,18 @@ class JsonLogHandler(logging.Handler):
     def get_entries(self) -> list:
         return self._log
 
+
 class JsonLogCapture:
     """
     A context manager that captures logs and returns them as a list of JSON
     """
 
-    def __init__(self, logger_name: str, level = logging.NOTSET, handler: Optional[JsonLogHandler]=None) -> None:
+    def __init__(
+        self,
+        logger_name: str,
+        level=logging.NOTSET,
+        handler: Optional[JsonLogHandler] = None,
+    ) -> None:
         """
         :param logger_name: The name of the logger to catch.
         :param level: The level of the logger to catch.
@@ -70,5 +78,3 @@ class JsonLogCapture:
         Returns the log entries as a list of JSON compatible dictionaries.
         """
         return self._json_log.get_entries()
-    
-

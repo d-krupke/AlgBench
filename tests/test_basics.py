@@ -1,5 +1,7 @@
-from algbench import Benchmark, describe
 import logging
+
+from algbench import Benchmark, describe
+
 
 def test_simple():
     benchmark = Benchmark("./test_benchmark")

@@ -2,11 +2,11 @@
 Gathering information of the environment the
 code is running.
 """
-import os
 import socket
 import subprocess
 import sys
 import typing
+from pathlib import Path
 
 import __main__
 import pkg_resources
@@ -42,7 +42,7 @@ def get_environment_info(cached=True) -> dict:
         "hostname": socket.gethostname(),
         "python_version": sys.version,
         "python": sys.executable,
-        "cwd": os.getcwd(),
+        "cwd": Path.cwd(),
         "environment": [
             {
                 "name": str(pkg.project_name),

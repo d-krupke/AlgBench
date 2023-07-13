@@ -561,7 +561,7 @@ the message structure from the data. This allows you to easily query
 for specific events and directly extract the data you want to analyze.
 
 .. code:: python
-   
+
    logger.info("Submodule X needed %d iterations", 42)
 
 Will be saved as a dictionary with a separate field for the message and
@@ -625,6 +625,7 @@ Finally, add ``.gitattributes`` to git via
 Version History
 ===============
 
+- **2.2.0** Allowing to skip entries in ``read_as_pandas`` by returning a None for the row.
 - **2.1.0** More flexible stream handling. You can now disable the output saving and hidding. The default behavior still is to save the output with time stamps and hide it from the console.
 - **2.0.0** Extensive change of stdout/stderr handling and new logging functionality.
    By default, stdout and stderr will now be saved with the runtime of the function.

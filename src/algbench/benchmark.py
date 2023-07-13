@@ -1,19 +1,18 @@
 import datetime
 import inspect
-import io
 import logging
+import sys
 import traceback
 import typing
-import sys
 from contextlib import ExitStack, redirect_stderr, redirect_stdout
 
 import yaml
 
+from ._stream_utils import NotSavingIO, PrintingStringIO, StreamWithTime
 from .benchmark_db import BenchmarkDb
 from .db.json_serializer import to_json
 from .fingerprint import fingerprint
 from .log_capture import JsonLogCapture, JsonLogHandler
-from ._stream_utils import StreamWithTime, PrintingStringIO, NotSavingIO
 from .utils import Timer
 
 
@@ -41,7 +40,13 @@ class Benchmark:
     running. It could lead to data loss.
     """
 
-    def __init__(self, path: str, save_output: bool = True, hide_output: bool = True, save_output_with_time: bool = True) -> None:
+    def __init__(
+        self,
+        path: str,
+        save_output: bool = True,
+        hide_output: bool = True,
+        save_output_with_time: bool = True,
+    ) -> None:
         """
         Just specify the path of where to put the
         database and everything else happens magically.
@@ -183,16 +188,16 @@ class Benchmark:
                             "logging": log_handler.get_entries(),
                         },
                     )
-            print(".", end="")
+            print(".", end="")  # flake8: noqa T201
         except Exception as e:
-            print()
-            print("Exception while running benchmark.")
-            print("=====================================")
-            print(yaml.dump(arg_data))
-            print("-------------------------------------")
-            print("ERROR:", e, f"({type(e)})")
-            print(traceback.format_exc())
-            print("-------------------------------------")
+            print()  # flake8: noqa T201
+            print("Exception while running benchmark.")  # flake8: noqa T201
+            print("=====================================")  # flake8: noqa T201
+            print(yaml.dump(arg_data))  # flake8: noqa T201
+            print("-------------------------------------")  # flake8: noqa T201
+            print("ERROR:", e, f"({type(e)})")  # flake8: noqa T201
+            print(traceback.format_exc())  # flake8: noqa T201
+            print("-------------------------------------")  # flake8: noqa T201
             raise
 
     def add(self, func: typing.Callable, *args, **kwargs):
