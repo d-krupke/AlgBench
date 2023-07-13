@@ -9,7 +9,7 @@ import shutil
 import socket
 import typing
 import zipfile
-from zipfile import ZipFile
+from zipfile import ZipFile, BadZipFile
 
 from .json_serializer import to_json
 
@@ -102,21 +102,30 @@ class NfsJsonList:
         yield from self._cache
 
     def iter_compressed(self):
+        """
+        Iterate over all entries in the compressed database.
+        This may not represent the whole database if the database is not completely compressed.
+        Use the ``__iter__`` method to iterate over the whole database.
+        """
         compr_path = os.path.join(self.path, "_compressed.zip")
         if os.path.exists(compr_path):
             with ZipFile(compr_path, "r") as z:
                 for filename in z.filelist:
-                    with z.open(filename, "r") as f:
-                        for line in f.readlines():
-                            try:
-                                entry = json.loads(line)
-                                yield entry
-                            except Exception:
-                                # Just continue. Probably a synchronization
-                                #  thing of the NFS.
-                                _log.warning(
-                                    f'Could not load "{line}" in "{compr_path}".'
-                                )
+                    yield from self._iter_compressed_file(z, filename, compr_path)
+
+    def _iter_compressed_file(self, zip_file, filename, compr_path):
+        try:
+            with zip_file.open(filename, "r") as f:
+                for line in f.readlines():
+                    try:
+                        entry = json.loads(line)
+                        yield entry
+                    except Exception:
+                        # Just continue. Probably a synchronization
+                        #  thing of the NFS.
+                        _log.warning(f'Could not load "{line}" in "{compr_path}".')
+        except BadZipFile as e:
+            _log.warning(f"Could not open file {filename}. Bad Zip: {e}")
 
     def iter_uncompressed(self):
         # load uncompressed data
