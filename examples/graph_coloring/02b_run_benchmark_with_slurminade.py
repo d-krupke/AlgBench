@@ -27,7 +27,7 @@ slurminade.update_default_configuration(
     partition="alg",
     constraint="alggen03",
     mail_user="my_mail@supermail.com",
-    mail_type="ALL",
+    mail_type="ALL",  # or "FAIL" if you only want to be notified about failures.
 )
 slurminade.set_dispatch_limit(200)
 # ----------------------
@@ -56,6 +56,8 @@ def load_instance_and_run(instance_name: str, alg_params):
 
 # --------------------------
 # Compression is not thread-safe so we make it a separate function
+# if you only notify about failures, you may want to do
+# ``@slurminade.slurmify(mail_type="ALL)`` to be notified after completion.
 @slurminade.slurmify()
 def compress():
     benchmark.compress()
