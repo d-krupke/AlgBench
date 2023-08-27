@@ -112,6 +112,9 @@ read some papers from the SIAM Symposium on Algorithm Engineering and
 Experiments (ALENEX) to see how smaller studies can be performed
 (though, for most papers you will find aspects that could be improved).
 
+Before you submit any paper (or thesis) with an empirical analysis,
+I also recommend to first go through `this checklist <https://blog.sigplan.org/2019/08/28/a-checklist-manifesto-for-empirical-evaluation-a-preemptive-strike-against-a-replication-crisis-in-computer-science/>`__.
+
 Installation
 ------------
 
