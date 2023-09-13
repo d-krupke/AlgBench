@@ -28,6 +28,17 @@ def get_git_revision() -> typing.Optional[str]:
         label = None
     return label
 
+def get_python_file() -> typing.Optional[str]:
+    """
+    Return the path of the calling python file.
+    """
+    try:
+        label = __main__.__file__
+    except AttributeError:
+        # Jupyter notebooks don't have __file__ attribute
+        label = None
+    return label
+
 
 def get_environment_info(cached=True) -> dict:
     """
@@ -52,6 +63,6 @@ def get_environment_info(cached=True) -> dict:
             for pkg in pkg_resources.working_set
         ],
         "git_revision": get_git_revision(),
-        "python_file": __main__.__file__,
+        "python_file": get_python_file(),
     }
     return __cached
