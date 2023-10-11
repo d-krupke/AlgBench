@@ -518,7 +518,7 @@ On gaining more insights using logging
 ---------------------------------------
 
 If you develop complex algorithms, you often want to not only measure
-the runtime of thw whole algorithm, but also of its parts, as well as
+the runtime of the whole algorithm, but also of its parts, as well as
 other information, such as the number of iterations, the current
 solution, etc. You can use the Python logging framework for this. The
 logging framework allows you to create loggers that can be configured
