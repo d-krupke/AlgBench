@@ -157,10 +157,10 @@ results.
 
    benchmark = Benchmark("./my_benchmark")
 
-   # Optionally if logging is used):
+   # Optionally (if logging is used):
    import logging
 
-   # Configure with logger should be captured and with which level
+   # Configure which logger should be captured and with which level
    benchmark.capture_logger("my_alg", logging.INFO)
    benchmark.capture_logger("my_alg.submodule", logging.WARNING)
 
@@ -523,12 +523,12 @@ other information, such as the number of iterations, the current
 solution, etc. You can use the Python logging framework for this. The
 logging framework allows you to create loggers that can be configured
 individually. You can also create a logger for each module and
-submodule, and configure them individually. You can also configure
+submodule, and configure them individually. You can further configure
 handlers for the loggers, e.g., to write them to a file or to the
-console. You can also configure the level of the loggers and handlers,
+console. The level of the loggers and handlers can also be configured,
 such that you can easily switch between different levels of logging.
 AlgBench allows you to capture the loggers and save them to the
-database. You can then extract them and analyze them.
+database. You can then extract and analyze them.
 
 You can also use simple ``print`` statements, but they are not as
 flexible as the logging framework. While AlgBench can actually
