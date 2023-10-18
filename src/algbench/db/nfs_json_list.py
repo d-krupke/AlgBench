@@ -34,7 +34,7 @@ class NfsJsonList:
         self._subfile_path: typing.Union[str, pathlib.Path] = self._get_unique_name()
         self._cache: typing.List = []
         self._filesize: int = 0
-        self._file_split_size: float = file_split_mb
+        self._file_split_size: float = file_split_mb * 1024 * 1024
 
     def _get_unique_name(self, _tries=7):
         """
@@ -56,6 +56,7 @@ class NfsJsonList:
         Warning: This may not be threadsafe! If you want to extract all data to
         a single file, just use 'read' and dump the output into a single json.
         """
+        self.flush()
         compr_path = os.path.join(self.path, "_compressed.zip")
         with ZipFile(
             compr_path, "a", compression=compression, compresslevel=compresslevel
@@ -100,7 +101,7 @@ class NfsJsonList:
                 msg = "Could not write to disk for unknown reasons."
                 raise RuntimeError(msg)
             
-            if self._filesize > 1024 * 1024 * self._file_split_size:
+            if self._filesize > self._file_split_size:
                 new_unique_name = self._get_unique_name()
                 _log.info(f"File {self._subfile_path} exceeds {self._file_split_size} MB, starting new file {new_unique_name}.")
                 self._subfile_path = new_unique_name
