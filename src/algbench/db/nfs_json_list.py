@@ -22,7 +22,7 @@ class NfsJsonList:
     even for slurm pools with NFS.
     """
 
-    def __init__(self, path: typing.Union[str, pathlib.Path]):
+    def __init__(self, path: typing.Union[str, pathlib.Path], file_split_mb: float = 5):
         self.path: typing.Union[str, pathlib.Path] = path
         if not os.path.exists(path):
             # Could fail in very few unlucky cases on an NFS (parallel creations)
@@ -33,6 +33,8 @@ class NfsJsonList:
             raise RuntimeError(msg)
         self._subfile_path: typing.Union[str, pathlib.Path] = self._get_unique_name()
         self._cache: typing.List = []
+        self._filesize: int = 0
+        self._file_split_size: float = file_split_mb
 
     def _get_unique_name(self, _tries=3):
         """
@@ -84,18 +86,27 @@ class NfsJsonList:
     def flush(self):
         if not self._cache:
             return
-        path = os.path.join(self.path, self._subfile_path)
-        with open(path, "a") as f:
-            for data in self._cache:
+        for data in self._cache:
+            path = os.path.join(self.path, self._subfile_path)
+            with open(path, "a") as f:
                 data = to_json(data)
-                f.write(json.dumps(data) + "\n")
-            _log.info(f"Wrote {len(self._cache)} entries to disk.")
-        if os.path.getsize(path) <= 0:
-            msg = "Could not write to disk. Resulting file has zero size."
-            raise RuntimeError(msg)
-        if not os.path.isfile(path):
-            msg = "Could not write to disk for unknown reasons."
-            raise RuntimeError(msg)
+                data = json.dumps(data) + "\n"
+                f.write(data)
+                self._filesize += len(data)
+            if os.path.getsize(path) <= 0:
+                msg = "Could not write to disk. Resulting file has zero size."
+                raise RuntimeError(msg)
+            if not os.path.isfile(path):
+                msg = "Could not write to disk for unknown reasons."
+                raise RuntimeError(msg)
+            
+            if self._filesize > 1024 * 1024 * self._file_split_size:
+                new_unique_name = self._get_unique_name()
+                _log.info(f"File {self._subfile_path} exceeds {self._file_split_size} MB, starting new file {new_unique_name}.")
+                self._subfile_path = new_unique_name
+                self._filesize = 0
+            
+        _log.info(f"Wrote {len(self._cache)} entries to disk.")
         self._cache.clear()
 
     def iter_cache(self):
