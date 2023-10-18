@@ -22,7 +22,7 @@ class NfsJsonList:
     even for slurm pools with NFS.
     """
 
-    def __init__(self, path: typing.Union[str, pathlib.Path], file_split_mb: float = 5):
+    def __init__(self, path: typing.Union[str, pathlib.Path], file_split_mb: float=30):
         self.path: typing.Union[str, pathlib.Path] = path
         if not os.path.exists(path):
             # Could fail in very few unlucky cases on an NFS (parallel creations)
@@ -36,7 +36,7 @@ class NfsJsonList:
         self._filesize: int = 0
         self._file_split_size: float = file_split_mb
 
-    def _get_unique_name(self, _tries=3):
+    def _get_unique_name(self, _tries=7):
         """
         Generate a unique file name to prevent collisions of parallel processes.
         """
