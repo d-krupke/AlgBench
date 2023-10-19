@@ -271,7 +271,7 @@ class Benchmark:
     def delete_if(self, condition: typing.Callable[[typing.Dict], bool]):
         """
         Delete entries if a specific condition is met.
-        This is currently inefficiently, as always a copy
+        This is currently inefficient, as always a copy
         of the benchmark is created.
         Use `front` to get a preview on how an entry that is
         passed to the condition looks like.

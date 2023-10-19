@@ -1,6 +1,6 @@
 """
 A reasonably robust JSON-serializer. The purpose is only to save data
-for  a later analysis, not to recreate it exactly.
+for a later analysis, not to recreate it exactly.
 If something cannot be converted to JSON, it is converted to str.
 """
 import json
