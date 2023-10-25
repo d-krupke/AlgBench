@@ -89,3 +89,10 @@ class BenchmarkDb:
             return next(self.__iter__())
         except StopIteration:
             return None
+
+    def apply(self, ):
+        db = NfsJsonList(os.path.join(os.path.join(self.path, "results_apply")))
+        # TODO copy all entries that fulfill the callable thingy
+        self._data.delete()
+        db.move_directory(os.path.join(self.path, "results"))
+        self._data = db
