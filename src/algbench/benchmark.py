@@ -270,7 +270,7 @@ class Benchmark:
 
     def delete_if(self, condition: typing.Callable[[typing.Dict], bool]):
         """
-        Delete entries if a specific condition is met.
+        Delete entries if a specific condition is met (return True).
         Recreates the internal 'results' folder for this porpose. 
         Use `front` to get a preview on how an entry that is
         passed to the condition looks like.
@@ -280,9 +280,9 @@ class Benchmark:
 
         def func(apply_lambda) -> typing.Dict:
             if condition(apply_lambda):
-                return apply_lambda
-            else:
                 return None
+            else:
+                return apply_lambda
 
         self.apply(func)
 

@@ -18,6 +18,7 @@ def test_apply():
 
     assert db_count_entries(benchmark) == 20
 
+
     def func(entry: typing.Dict):
         if entry["result"]["entry_index"] % 2 == 1:
             return None
@@ -33,6 +34,9 @@ def test_apply():
         assert "timestamp" not in entry
         assert "result" in entry
 
-    benchmark.delete()
+    benchmark.repair() # implies both a delete_if() and apply() call
+    assert db_count_entries(benchmark) == 10
 
+    benchmark.delete()
+    
 test_apply()
