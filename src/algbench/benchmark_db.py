@@ -75,14 +75,19 @@ class BenchmarkDb:
     def get_env_info(self, env_fingerprint):
         return self._env_data[env_fingerprint]
 
+    def create_entry_with_env(self, entry):
+        entry = entry.copy()
+        try:
+            entry["env"] = self.get_env_info(entry["env_fingerprint"])
+            return entry
+        except KeyError:
+            return None
+        
     def __iter__(self):
         for entry in self._data:
-            entry = entry.copy()
-            try:
-                entry["env"] = self.get_env_info(entry["env_fingerprint"])
-                yield entry
-            except KeyError:
-                pass
+            entry_with_env = self.create_entry_with_env(entry)
+            if entry_with_env:
+                yield entry_with_env
 
     def front(self) -> typing.Optional[typing.Dict]:
         try:
@@ -91,13 +96,13 @@ class BenchmarkDb:
             return None
 
     def apply(self, func: typing.Callable[[typing.Dict], typing.Dict]):
-        db = NfsJsonList(os.path.join(os.path.join(self.path, "results_apply")))
+        old_db = self._data
+        old_db.move_directory(os.path.join(self.path, "results_old"))
+        self._data = NfsJsonList(os.path.join(os.path.join(self.path, "results")))
 
-        for entry in self:
-            new_entry = func(entry)
-            if new_entry:
-                self.insert(new_entry)
-        
-        self._data.delete()
-        db.move_directory(os.path.join(self.path, "results"))
-        self._data = db
+        for entry in old_db:
+            entry = func(self.create_entry_with_env(entry))
+            if (entry):
+                self.insert(entry)
+
+        old_db.delete()
