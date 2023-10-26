@@ -232,7 +232,7 @@ class Benchmark:
 
         NOT THREAD-SAFE!
         """
-        self.delete_if(lambda data: None)
+        self.delete_if(lambda data: False)
 
     def __iter__(self) -> typing.Generator[typing.Dict, None, None]:
         """
