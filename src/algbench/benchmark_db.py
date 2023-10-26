@@ -90,9 +90,14 @@ class BenchmarkDb:
         except StopIteration:
             return None
 
-    def apply(self, ):
+    def apply(self, func: typing.Callable[[typing.Dict], typing.Dict]):
         db = NfsJsonList(os.path.join(os.path.join(self.path, "results_apply")))
-        # TODO copy all entries that fulfill the callable thingy
+
+        for entry in self:
+            new_entry = func(entry)
+            if new_entry:
+                self.insert(new_entry)
+        
         self._data.delete()
         db.move_directory(os.path.join(self.path, "results"))
         self._data = db

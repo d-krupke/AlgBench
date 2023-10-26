@@ -232,7 +232,7 @@ class Benchmark:
 
         NOT THREAD-SAFE!
         """
-        self.delete_if(lambda data: False)
+        self.delete_if(lambda data: None)
 
     def __iter__(self) -> typing.Generator[typing.Dict, None, None]:
         """
@@ -271,22 +271,31 @@ class Benchmark:
     def delete_if(self, condition: typing.Callable[[typing.Dict], bool]):
         """
         Delete entries if a specific condition is met.
-        This is currently inefficient, as always a copy
-        of the benchmark is created.
+        Recreates the internal 'results' folder for this porpose. 
         Use `front` to get a preview on how an entry that is
         passed to the condition looks like.
 
         NOT THREAD-SAFE!
         """
-        import tempfile
 
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            benchmark_copy = Benchmark(tmpdirname)
-            for entry in self:
-                if not condition(entry):
-                    benchmark_copy.insert(entry)
-            self.clear()
-            for entry in benchmark_copy:
-                self.insert(entry)
-            self.compress()
-            benchmark_copy.delete()
+        def func(apply_lambda) -> typing.Dict:
+            if condition(apply_lambda):
+                return apply_lambda
+            else:
+                return None
+
+        self.apply(func)
+
+    def apply(self, func: typing.Callable[[typing.Dict], typing.Dict]):
+        """
+        Allows to modify all entries (in place !) inside this benchmark, 
+        based on the provided callable. It is being called for every
+        entry inside the database, and the returned entry will be stored 
+        instead. If None is returned, the provided entry will be deleted
+        from the database. 
+
+        NOT THREAD-SAFE, execute this while no other instance is accessing
+        the file system. 
+        """
+        self._db.apply(func)
+        self.compress()
