@@ -1,5 +1,7 @@
+import datetime
 import json
 import os
+import random
 import shutil
 import sys
 import typing
@@ -96,8 +98,12 @@ class BenchmarkDb:
             return None
 
     def apply(self, func: typing.Callable[[typing.Dict], typing.Dict]):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M")
+        rand = random.randint(0, 9999)
+        old_db_dir = f"results_old{timestamp}_{rand}"
+
         old_db = self._data
-        old_db.move_directory(os.path.join(self.path, "results_old"))
+        old_db.move_directory(os.path.join(self.path, old_db_dir))
         self._data = NfsJsonList(os.path.join(os.path.join(self.path, "results")))
 
         for entry in old_db:
