@@ -38,5 +38,3 @@ def test_apply():
     assert db_count_entries(benchmark) == 10
 
     benchmark.delete()
-    
-test_apply()
