@@ -9,7 +9,6 @@ import typing
 from pathlib import Path
 
 import __main__
-import pkg_resources
 
 __cached = None
 
@@ -54,6 +53,8 @@ def get_environment_info(cached=True) -> dict:
         "python_version": sys.version,
         "python": sys.executable,
         "cwd": Path.cwd(),
+        """
+        # Unfortunately deprecated.
         "environment": [
             {
                 "name": str(pkg.project_name),
@@ -62,6 +63,7 @@ def get_environment_info(cached=True) -> dict:
             }
             for pkg in pkg_resources.working_set
         ],
+        """
         "git_revision": get_git_revision(),
         "python_file": get_python_file(),
     }

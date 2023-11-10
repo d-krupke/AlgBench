@@ -300,3 +300,19 @@ class Benchmark:
         """
         self._db.apply(func)
         self.compress()
+
+    def __len__(self):
+        """
+        Return the number of fingerprints in the database.
+        It is possible that this does not correspond to the
+        number of entries. Use `__iter__` to iterate over
+        all entries and count them to get the number of entries.
+        However, this is not recommended, as it is slow.
+        """
+        return self._db.__len__()
+    
+    def empty(self):
+        """
+        Return True if the database is empty, False otherwise.
+        """
+        return len(self) == 0

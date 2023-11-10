@@ -112,3 +112,6 @@ class BenchmarkDb:
                 self.insert(new_entry)
 
         old_db.delete()
+
+    def __len__(self):
+        return len(self._arg_fingerprints)
