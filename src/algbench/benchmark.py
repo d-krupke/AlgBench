@@ -109,7 +109,7 @@ class Benchmark:
         """
         del self._log_captures[logger_name]
 
-    def _get_arg_data(self, func, args, kwargs):
+    def _get_arg_data(self, func, args, kwargs) -> typing.Tuple[str, typing.Dict]:
         sig = inspect.signature(func)
         func_args = {
             k: v.default
@@ -125,8 +125,9 @@ class Benchmark:
                 if not key.startswith("_")
             },
         }
-
-        return fingerprint(data), to_json(data)
+        json_data = to_json(data)
+        assert isinstance(json_data, dict)
+        return fingerprint(data), json_data
 
     def exists(self, func: typing.Callable, *args, **kwargs) -> bool:
         """
@@ -278,15 +279,15 @@ class Benchmark:
         NOT THREAD-SAFE!
         """
 
-        def func(apply_lambda) -> typing.Dict:
-            if condition(apply_lambda):
+        def func(entry) -> typing.Optional[typing.Dict]:
+            if condition(entry):
+                # Delete the entry by returning None
                 return None
-            else:
-                return apply_lambda
+            return entry
 
         self.apply(func)
 
-    def apply(self, func: typing.Callable[[typing.Dict], typing.Dict]):
+    def apply(self, func: typing.Callable[[typing.Dict], typing.Optional[typing.Dict]]):
         """
         Allows to modify all entries (in place !) inside this benchmark, 
         based on the provided callable. It is being called for every
