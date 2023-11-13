@@ -2,7 +2,7 @@ from algbench import Benchmark
 
 
 def test_extensive_use_case():
-    benchmark = Benchmark("./test_benchmark")
+    benchmark = Benchmark("./extensive_benchmark")
     benchmark.clear()
     assert benchmark.empty()
 
@@ -20,7 +20,7 @@ def test_extensive_use_case():
     assert len(benchmark) == 500
     benchmark.delete_if(lambda entry: False)
     assert len(benchmark) == 500
-    benchmark_ = Benchmark("./test_benchmark")
+    benchmark_ = Benchmark("./extensive_benchmark")
     assert len(benchmark_) == 500
     benchmark_.compress()
     assert len(benchmark_) == 500
@@ -32,3 +32,5 @@ def test_extensive_use_case():
     assert len(benchmark_) == 250
     benchmark.delete()
 
+if __name__ == "__main__":
+    test_extensive_use_case()

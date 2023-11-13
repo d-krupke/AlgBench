@@ -190,20 +190,11 @@ class NfsJsonList:
         self._cache.clear()
         shutil.rmtree(self.path)
 
-    def move_directory(self, new_path: str):
+    def set_new_directory(self, new_path: str):
         """
-        Changes the internal directory where the db files are 
-        stored while keeping all files (renames the directory).
-        This operation is not thread safe, especially not
-        over other nodes or instances of this script. 
+        Not thread safe. Does not check the new path 
+        and does not move any folders on its own. It is expected 
+        that this step has already been performed. 
         """
-
-        if os.path.exists(new_path) or os.path.isfile(new_path):
-            msg = f"Error while moving database to {new_path}: There exists an equally named file or folder"
-            raise RuntimeError(msg)
-        shutil.move(self.path, new_path)
-
-        _log.info(f"Moved database from {self.path} to {new_path}.")
-        self._subfile_path = self._get_unique_name()
-        self._filesize = 0
+        _log.info(f"New database path being set to {new_path} (was {self.path}).")
         self.path = new_path

@@ -1,4 +1,5 @@
 import datetime
+import random
 import inspect
 import logging
 import sys
@@ -298,7 +299,22 @@ class Benchmark:
         NOT THREAD-SAFE, execute this while no other instance is accessing
         the file system. 
         """
-        self._db.apply(func)
+        old_db = self._db
+        original_path = old_db.path
+
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M")
+        rand = random.randint(0, 9999)
+        new_path = f"{original_path}{timestamp}{rand}"
+        
+        old_db.move_database(new_path)
+        self._db = BenchmarkDb(original_path)
+
+        for entry in old_db:
+            new_entry = func(entry)
+            if new_entry:
+                self.insert(new_entry)
+
+        old_db.delete()
         self.compress()
 
     def __len__(self):

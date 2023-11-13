@@ -1,7 +1,5 @@
-import datetime
 import json
 import os
-import random
 import shutil
 import sys
 import typing
@@ -97,21 +95,23 @@ class BenchmarkDb:
         except StopIteration:
             return None
 
-    def apply(self, func: typing.Callable[[typing.Dict], typing.Optional[typing.Dict]]):
-        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M")
-        rand = random.randint(0, 9999)
-        old_db_dir = f"results_old{timestamp}_{rand}"
-
-        old_db = self._data
-        old_db.move_directory(os.path.join(self.path, old_db_dir))
-        self._data = NfsJsonList(os.path.join(os.path.join(self.path, "results")))
-
-        for entry in old_db:
-            new_entry = func(self._create_entry_with_env(entry))
-            if new_entry:
-                self.insert(new_entry)
-
-        old_db.delete()
-
     def __len__(self):
         return len(self._arg_fingerprints)
+    
+    def move_database(self, new_path: str):
+        """
+        Moves the entire database to a new directory, keeping all entries. 
+        THIS OPERATION IS NOT THREAD-SAFE, especially not regarding other 
+        nodes or instances of this script. Other instances will not be notified
+        that the base directory has changed! 
+        """
+
+        if os.path.exists(new_path) or os.path.isfile(new_path):
+            msg = f"Error while moving database to {new_path}: There exists an equally named file or folder"
+            raise RuntimeError(msg)
+        shutil.move(self.path, new_path)
+
+        self.path = new_path
+        self._arg_fingerprints.set_new_directory(os.path.join(new_path, "arg_fingerprints"))
+        self._data.set_new_directory(os.path.join(new_path, "results"))
+        self._env_data.set_new_directory(os.path.join(new_path, "env_info"))
