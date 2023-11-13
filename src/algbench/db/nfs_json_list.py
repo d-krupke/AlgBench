@@ -199,11 +199,11 @@ class NfsJsonList:
         """
 
         if os.path.exists(new_path) or os.path.isfile(new_path):
-            msg = f"Error while moving database to {new_path}: There exists an equally named file or folder"
+            msg = f"Error while moving NFSJsonList database to {new_path}: There exists an equally named file or folder"
             raise RuntimeError(msg)
         shutil.move(self.path, new_path)
 
-        _log.info(f"Moved database from {self.path} to {new_path}.")
+        _log.info(f"Moved NFSJsonList from {self.path} to {new_path}.")
         self._subfile_path = self._get_unique_name()
         self._filesize = 0
         self.path = new_path

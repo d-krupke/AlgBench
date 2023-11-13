@@ -74,13 +74,17 @@ class BenchmarkDb:
         self._data.clear()
         self._env_data.clear()
 
-    def get_env_info(self, env_fingerprint):
-        return self._env_data[env_fingerprint]
+    def get_env_info(self, env_fingerprint, env_data: typing.Optional[NfsJsonDict]=None):
+        if not env_data:
+            env_data = self._env_data
+        return env_data[env_fingerprint]
 
-    def _create_entry_with_env(self, entry):
+    def _create_entry_with_env(self, entry: typing.Dict, env_data: typing.Optional[NfsJsonDict]=None):
         entry = entry.copy()
         try:
-            entry["env"] = self.get_env_info(entry["env_fingerprint"])
+            if not env_data:
+                env_data = self._env_data
+            entry["env"] = self.get_env_info(entry["env_fingerprint"], env_data)
             return entry
         except KeyError:
             return None
@@ -100,18 +104,25 @@ class BenchmarkDb:
     def apply(self, func: typing.Callable[[typing.Dict], typing.Optional[typing.Dict]]):
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M")
         rand = random.randint(0, 9999)
-        old_db_dir = f"results_old{timestamp}_{rand}"
+        unique_suffix = f"{timestamp}_{rand}"
 
-        old_db = self._data
-        old_db.move_directory(os.path.join(self.path, old_db_dir))
-        self._data = NfsJsonList(os.path.join(os.path.join(self.path, "results")))
+        old_env_data = self._env_data
+        old_env_data.move_directory(os.path.join(self.path, f"env_info{unique_suffix}"))
+        old_data = self._data
+        old_data.move_directory(os.path.join(self.path, f"results_old{unique_suffix}"))
 
-        for entry in old_db:
-            new_entry = func(self._create_entry_with_env(entry))
+        self._data = NfsJsonList(os.path.join(self.path, "results"))
+        self._env_data = NfsJsonDict(os.path.join(self.path, "env_info"))
+        self._arg_fingerprints.clear()
+
+        for entry in old_data:
+            new_entry = func(self._create_entry_with_env(entry, env_data=old_env_data))
             if new_entry:
                 self.insert(new_entry)
 
-        old_db.delete()
+        old_data.delete()
+        old_env_data.delete()
 
     def __len__(self):
         return len(self._arg_fingerprints)
+    

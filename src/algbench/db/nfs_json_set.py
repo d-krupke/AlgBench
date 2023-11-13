@@ -51,3 +51,10 @@ class NfsJsonSet:
 
     def __len__(self):
         return len(self._values)
+    
+    def move_directory(self, new_path: str):
+        """
+        Changes the internal directory of this NFSJsonSet (essentially 
+        moves the directory). Not thread safe! 
+        """
+        self._db.move_directory(new_path)

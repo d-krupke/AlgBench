@@ -58,3 +58,10 @@ class NfsJsonDict:
 
     def delete(self):
         self._db.delete()
+
+    def move_directory(self, new_path: str):
+        """
+        Changes the internal directory of this NFSJsonDict.
+        Not thread safe! 
+        """
+        self._db.move_directory(new_path)
