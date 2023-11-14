@@ -83,7 +83,7 @@ alg_params_to_evaluate = [
 if __name__ == "__main__":
     # ------------------------
     # tiny changes here
-    with slurminade.Batch(100) as batch:  # combine up to 100 calls into into one task
+    with slurminade.Batch(100) as batch:  # combine up to 100 calls into one task
         for instance_name in instances:
             for conf in alg_params_to_evaluate:
                 load_instance_and_run.distribute(instance_name, conf)
