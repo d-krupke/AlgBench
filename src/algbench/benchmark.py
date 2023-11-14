@@ -305,9 +305,10 @@ class Benchmark:
 
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M")
         i = 0
-        while os.path.exists(f"{original_path}{timestamp}-{i}"):
+        new_path = f"{original_path}{timestamp}-{i}"
+        while os.path.exists(new_path):
             i+=1
-        new_path = f"{original_path}{timestamp}{i}"
+            new_path = f"{original_path}{timestamp}-{i}"
         
         old_db.move_database(new_path)
         self._db = BenchmarkDb(original_path)
