@@ -628,6 +628,7 @@ Finally, add ``.gitattributes`` to git via
 Version History
 ===============
 
+- **2.3.0** Removing information on installed packages due to deprecated ``pkg_resources``. New apply-function.
 - **2.2.2** Fixing problem with Jupyter notebooks, because they may not have a ``__file__`` attribute.
 - **2.2.1** Should be able to deal with corrupt zip files now.
 - **2.2.0** Allowing to skip entries in ``read_as_pandas`` by returning a None for the row.
