@@ -189,3 +189,12 @@ class NfsJsonList:
     def delete(self):
         self._cache.clear()
         shutil.rmtree(self.path)
+
+    def set_new_directory(self, new_path: str):
+        """
+        Not thread safe. Does not check the new path 
+        and does not move any folders on its own. It is expected 
+        that this step has already been performed. 
+        """
+        _log.info(f"New database path being set to {new_path} (was {self.path}).")
+        self.path = new_path
