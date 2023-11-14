@@ -1,9 +1,11 @@
 import datetime
+import random
 import inspect
 import logging
 import sys
 import traceback
 import typing
+import os
 from contextlib import ExitStack, redirect_stderr, redirect_stdout
 
 import yaml
@@ -109,7 +111,7 @@ class Benchmark:
         """
         del self._log_captures[logger_name]
 
-    def _get_arg_data(self, func, args, kwargs):
+    def _get_arg_data(self, func, args, kwargs) -> typing.Tuple[str, typing.Dict]:
         sig = inspect.signature(func)
         func_args = {
             k: v.default
@@ -125,8 +127,9 @@ class Benchmark:
                 if not key.startswith("_")
             },
         }
-
-        return fingerprint(data), to_json(data)
+        json_data = to_json(data)
+        assert isinstance(json_data, dict)
+        return fingerprint(data), json_data
 
     def exists(self, func: typing.Callable, *args, **kwargs) -> bool:
         """
@@ -270,23 +273,65 @@ class Benchmark:
 
     def delete_if(self, condition: typing.Callable[[typing.Dict], bool]):
         """
-        Delete entries if a specific condition is met.
-        This is currently inefficient, as always a copy
-        of the benchmark is created.
+        Delete entries if a specific condition is met (return True).
+        Recreates the internal 'results' folder for this porpose. 
         Use `front` to get a preview on how an entry that is
         passed to the condition looks like.
 
         NOT THREAD-SAFE!
         """
-        import tempfile
 
-        with tempfile.TemporaryDirectory() as tmpdirname:
-            benchmark_copy = Benchmark(tmpdirname)
-            for entry in self:
-                if not condition(entry):
-                    benchmark_copy.insert(entry)
-            self.clear()
-            for entry in benchmark_copy:
-                self.insert(entry)
-            self.compress()
-            benchmark_copy.delete()
+        def func(entry) -> typing.Optional[typing.Dict]:
+            if condition(entry):
+                # Delete the entry by returning None
+                return None
+            return entry
+
+        self.apply(func)
+
+    def apply(self, func: typing.Callable[[typing.Dict], typing.Optional[typing.Dict]]):
+        """
+        Allows to modify all entries (in place !) inside this benchmark, 
+        based on the provided callable. It is being called for every
+        entry inside the database, and the returned entry will be stored 
+        instead. If None is returned, the provided entry will be deleted
+        from the database. 
+
+        NOT THREAD-SAFE, execute this while no other instance is accessing
+        the file system. 
+        """
+        old_db = self._db
+        original_path = old_db.path
+
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M")
+        i = 0
+        while os.path.exists(f"{original_path}{timestamp}-{i}"):
+            i+=1
+        new_path = f"{original_path}{timestamp}{i}"
+        
+        old_db.move_database(new_path)
+        self._db = BenchmarkDb(original_path)
+
+        for entry in old_db:
+            new_entry = func(entry)
+            if new_entry:
+                self.insert(new_entry)
+
+        old_db.delete()
+        self.compress()
+
+    def __len__(self):
+        """
+        Return the number of fingerprints in the database.
+        It is possible that this does not correspond to the
+        number of entries. Use `__iter__` to iterate over
+        all entries and count them to get the number of entries.
+        However, this is not recommended, as it is slow.
+        """
+        return self._db.__len__()
+    
+    def empty(self):
+        """
+        Return True if the database is empty, False otherwise.
+        """
+        return len(self) == 0

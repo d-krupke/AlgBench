@@ -7,6 +7,8 @@ from .nfs_json_list import NfsJsonList
 class NfsJsonSet:
     def __init__(self, path) -> None:
         self._db = NfsJsonList(path)
+        # __values mirrors the database, but is a set
+        # It is expected to be relatively small, so that it can be kept in memory.
         self._values: typing.Set = set()
         self.load()
 
@@ -46,3 +48,13 @@ class NfsJsonSet:
 
     def delete(self):
         self._db.delete()
+
+    def __len__(self):
+        return len(self._values)
+
+    def set_new_directory(self, new_path: str):
+        """
+        NOT THREAD-SAFE. Does not check the new path, just
+        silently continues working in the new given directory. 
+        """
+        self._db.set_new_directory(new_path)
