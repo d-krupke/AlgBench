@@ -5,6 +5,7 @@ import logging
 import sys
 import traceback
 import typing
+import os
 from contextlib import ExitStack, redirect_stderr, redirect_stdout
 
 import yaml
@@ -303,8 +304,10 @@ class Benchmark:
         original_path = old_db.path
 
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M")
-        rand = random.randint(0, 9999)
-        new_path = f"{original_path}{timestamp}{rand}"
+        i = 0
+        while os.path.exists(f"{original_path}{timestamp}-{i}"):
+            i+=1
+        new_path = f"{original_path}{timestamp}{i}"
         
         old_db.move_database(new_path)
         self._db = BenchmarkDb(original_path)

@@ -53,17 +53,16 @@ def get_environment_info(cached=True) -> dict:
         "python_version": sys.version,
         "python": sys.executable,
         "cwd": Path.cwd(),
-        """
         # Unfortunately deprecated.
-        "environment": [
-            {
-                "name": str(pkg.project_name),
-                "path": str(pkg.location),
-                "version": str(pkg.parsed_version),
-            }
-            for pkg in pkg_resources.working_set
-        ],
-        """
+        # Looking for a replacement.
+        #"environment": [
+        #    {
+        #        "name": str(pkg.project_name),
+        #        "path": str(pkg.location),
+        #        "version": str(pkg.parsed_version),
+        #    }
+        #    for pkg in pkg_resources.working_set
+        #],
         "git_revision": get_git_revision(),
         "python_file": get_python_file(),
     }
