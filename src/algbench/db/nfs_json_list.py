@@ -72,6 +72,7 @@ class NfsJsonList:
                 z.write(path, file_name)
                 os.remove(path)
         _log.info(f"Compressed database has size {os.path.getsize(compr_path)}.")
+        self._new_data_file()
 
     def extend(self, entries: typing.List, flush=True):
         _log.info(f"Adding {len(entries)} items to database.")
@@ -102,13 +103,17 @@ class NfsJsonList:
                 raise RuntimeError(msg)
             
             if self._filesize > self._file_split_size:
-                new_unique_name = self._get_unique_name()
-                _log.info(f"File {self._subfile_path} exceeds {self._file_split_size} MB, starting new file {new_unique_name}.")
-                self._subfile_path = new_unique_name
-                self._filesize = 0
+                _log.info(f"File {self._subfile_path} exceeds {self._file_split_size} MB.")
+                self._new_data_file()
             
         _log.info(f"Wrote {len(self._cache)} entries to disk.")
         self._cache.clear()
+
+    def _new_data_file(self):
+        new_unique_name = self._get_unique_name()
+        _log.info(f"Start writing into new file {new_unique_name}.")
+        self._subfile_path = new_unique_name
+        self._filesize = 0
 
     def iter_cache(self):
         yield from self._cache

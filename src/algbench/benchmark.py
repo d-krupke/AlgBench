@@ -336,3 +336,14 @@ class Benchmark:
         Return True if the database is empty, False otherwise.
         """
         return len(self) == 0
+
+    def fingerprint(self): 
+        """
+        Returns a fingerprint over all data contained in this benchmark. 
+        Two fingerprints should be matching exactly if the benchmark contains the same
+        data, including timestamps etc., no matter the internal structure like order
+        of entries and possible compression.
+        """
+        hashes = [fingerprint(entry) for entry in self]
+        hashes.sort()
+        return fingerprint(hashes)
