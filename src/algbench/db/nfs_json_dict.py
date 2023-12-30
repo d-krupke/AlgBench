@@ -62,6 +62,6 @@ class NfsJsonDict:
     def move_directory(self, new_path: str):
         """
         Changes the internal directory of this NFSJsonDict.
-        Not thread safe! 
+        Not thread safe!
         """
         self._db.move_directory(new_path)

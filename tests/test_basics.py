@@ -5,6 +5,9 @@ from algbench import Benchmark, describe
 
 def test_simple():
     benchmark = Benchmark("./test_benchmark")
+    if not benchmark.empty():
+        benchmark.delete()
+        benchmark = Benchmark("./test_benchmark")
 
     def f(x, _test=2, default="default"):
         print(x)

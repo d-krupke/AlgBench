@@ -74,12 +74,16 @@ class BenchmarkDb:
         self._data.clear()
         self._env_data.clear()
 
-    def get_env_info(self, env_fingerprint, env_data: typing.Optional[NfsJsonDict]=None):
+    def get_env_info(
+        self, env_fingerprint, env_data: typing.Optional[NfsJsonDict] = None
+    ):
         if not env_data:
             env_data = self._env_data
         return env_data[env_fingerprint]
 
-    def _create_entry_with_env(self, entry: typing.Dict, env_data: typing.Optional[NfsJsonDict]=None):
+    def _create_entry_with_env(
+        self, entry: typing.Dict, env_data: typing.Optional[NfsJsonDict] = None
+    ):
         entry = entry.copy()
         try:
             if not env_data:
@@ -88,7 +92,7 @@ class BenchmarkDb:
             return entry
         except KeyError:
             return None
-        
+
     def __iter__(self):
         for entry in self._data:
             entry_with_env = self._create_entry_with_env(entry)
@@ -125,4 +129,3 @@ class BenchmarkDb:
 
     def __len__(self):
         return len(self._arg_fingerprints)
-    

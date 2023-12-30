@@ -9,7 +9,7 @@ import shutil
 import socket
 import typing
 import zipfile
-from zipfile import ZipFile, BadZipFile
+from zipfile import BadZipFile, ZipFile
 
 from .json_serializer import to_json
 
@@ -22,7 +22,9 @@ class NfsJsonList:
     even for slurm pools with NFS.
     """
 
-    def __init__(self, path: typing.Union[str, pathlib.Path], file_split_mb: float=30):
+    def __init__(
+        self, path: typing.Union[str, pathlib.Path], file_split_mb: float = 30
+    ):
         self.path: typing.Union[str, pathlib.Path] = path
         if not os.path.exists(path):
             # Could fail in very few unlucky cases on an NFS (parallel creations)
@@ -100,13 +102,15 @@ class NfsJsonList:
             if not os.path.isfile(path):
                 msg = "Could not write to disk for unknown reasons."
                 raise RuntimeError(msg)
-            
+
             if self._filesize > self._file_split_size:
                 new_unique_name = self._get_unique_name()
-                _log.info(f"File {self._subfile_path} exceeds {self._file_split_size} MB, starting new file {new_unique_name}.")
+                _log.info(
+                    f"File {self._subfile_path} exceeds {self._file_split_size} MB, starting new file {new_unique_name}."
+                )
                 self._subfile_path = new_unique_name
                 self._filesize = 0
-            
+
         _log.info(f"Wrote {len(self._cache)} entries to disk.")
         self._cache.clear()
 
@@ -192,10 +196,10 @@ class NfsJsonList:
 
     def move_directory(self, new_path: str):
         """
-        Changes the internal directory where the db files are 
+        Changes the internal directory where the db files are
         stored while keeping all files (renames the directory).
         This operation is not thread safe, especially not
-        over other nodes or instances of this script. 
+        over other nodes or instances of this script.
         """
 
         if os.path.exists(new_path) or os.path.isfile(new_path):

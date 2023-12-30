@@ -9,7 +9,7 @@ def test_extensive_use_case():
     def f(x, _test=2, default="default"):
         print(x)
         return {"r1": x, "r2": "test"}
-    
+
     for x in range(500):
         benchmark.add(f, x, _test=None)
 
@@ -32,5 +32,6 @@ def test_extensive_use_case():
     assert len(benchmark_) == 250
     benchmark.delete()
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     test_extensive_use_case()

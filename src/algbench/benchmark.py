@@ -272,7 +272,7 @@ class Benchmark:
     def delete_if(self, condition: typing.Callable[[typing.Dict], bool]):
         """
         Delete entries if a specific condition is met (return True).
-        Recreates the internal 'results' folder for this porpose. 
+        Recreates the internal 'results' folder for this porpose.
         Use `front` to get a preview on how an entry that is
         passed to the condition looks like.
 
@@ -289,14 +289,14 @@ class Benchmark:
 
     def apply(self, func: typing.Callable[[typing.Dict], typing.Optional[typing.Dict]]):
         """
-        Allows to modify all entries (in place !) inside this benchmark, 
+        Allows to modify all entries (in place !) inside this benchmark,
         based on the provided callable. It is being called for every
-        entry inside the database, and the returned entry will be stored 
+        entry inside the database, and the returned entry will be stored
         instead. If None is returned, the provided entry will be deleted
-        from the database. 
+        from the database.
 
         NOT THREAD-SAFE, execute this while no other instance is accessing
-        the file system. 
+        the file system.
         """
         self._db.apply(func)
         self.compress()
@@ -310,7 +310,7 @@ class Benchmark:
         However, this is not recommended, as it is slow.
         """
         return self._db.__len__()
-    
+
     def empty(self):
         """
         Return True if the database is empty, False otherwise.

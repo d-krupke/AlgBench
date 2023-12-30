@@ -27,6 +27,7 @@ def get_git_revision() -> typing.Optional[str]:
         label = None
     return label
 
+
 def get_python_file() -> typing.Optional[str]:
     """
     Return the path of the calling python file.
