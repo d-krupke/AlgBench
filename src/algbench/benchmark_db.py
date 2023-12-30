@@ -82,7 +82,7 @@ class BenchmarkDb:
             return entry
         except KeyError:
             return None
-        
+
     def __iter__(self):
         for entry in self._data:
             entry_with_env = self._create_entry_with_env(entry)
@@ -97,13 +97,13 @@ class BenchmarkDb:
 
     def __len__(self):
         return len(self._arg_fingerprints)
-    
+
     def move_database(self, new_path: str):
         """
-        Moves the entire database to a new directory, keeping all entries. 
-        THIS OPERATION IS NOT THREAD-SAFE, especially not regarding other 
+        Moves the entire database to a new directory, keeping all entries.
+        THIS OPERATION IS NOT THREAD-SAFE, especially not regarding other
         nodes or instances of this script. Other instances will not be notified
-        that the base directory has changed! 
+        that the base directory has changed!
         """
 
         if os.path.exists(new_path) or os.path.isfile(new_path):
@@ -112,6 +112,8 @@ class BenchmarkDb:
         shutil.move(self.path, new_path)
 
         self.path = new_path
-        self._arg_fingerprints.set_new_directory(os.path.join(new_path, "arg_fingerprints"))
+        self._arg_fingerprints.set_new_directory(
+            os.path.join(new_path, "arg_fingerprints")
+        )
         self._data.set_new_directory(os.path.join(new_path, "results"))
         self._env_data.set_new_directory(os.path.join(new_path, "env_info"))

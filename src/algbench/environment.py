@@ -27,6 +27,7 @@ def get_git_revision() -> typing.Optional[str]:
         label = None
     return label
 
+
 def get_python_file() -> typing.Optional[str]:
     """
     Return the path of the calling python file.
@@ -55,14 +56,14 @@ def get_environment_info(cached=True) -> dict:
         "cwd": Path.cwd(),
         # Unfortunately deprecated.
         # Looking for a replacement.
-        #"environment": [
+        # "environment": [
         #    {
         #        "name": str(pkg.project_name),
         #        "path": str(pkg.location),
         #        "version": str(pkg.parsed_version),
         #    }
         #    for pkg in pkg_resources.working_set
-        #],
+        # ],
         "git_revision": get_git_revision(),
         "python_file": get_python_file(),
     }

@@ -62,6 +62,6 @@ class NfsJsonDict:
     def set_new_directory(self, new_path: str):
         """
         NOT THREAD-SAFE! Does not check the new path, just
-        silently continues working in the new given directory. 
+        silently continues working in the new given directory.
         """
         self._db.set_new_directory(new_path)
