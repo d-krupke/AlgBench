@@ -23,8 +23,9 @@ class GraphInstanceDb:
 
     @functools.lru_cache(10)
     def __getitem__(self, name):
-        with (ZipFile(self.path, "r") as z, z.open(f"{name}.json", "r") as f):
-            return nx.json_graph.node_link.node_link_graph(json.load(f))
+        with ZipFile(self.path, "r") as z:
+            with z.open(f"{name}.json", "r") as f:
+                return nx.json_graph.node_link.node_link_graph(json.load(f))
 
     def __setitem__(self, name, graph):
         if not self.path.exists():
