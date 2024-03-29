@@ -59,7 +59,7 @@ def configure_grb_license_path():
         raise RuntimeError(msg)
 
 
-@slurminade.slurmify(mail="ALL")
+@slurminade.slurmify(mail_type="ALL")
 def compress_results():
     # Compress the results to save significant disk space
     benchmark.compress()
