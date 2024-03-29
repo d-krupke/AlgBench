@@ -11,6 +11,9 @@ import typing
 import gurobipy as gp
 import networkx as nx
 
+# default logging configuration
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+
 
 class _EdgeVariables:
     def __init__(self, G: nx.Graph, model: gp.Model):
@@ -79,7 +82,7 @@ class GurobiTspSolver:
         """
         Solve the model and return the objective value and the lower bound.
         """
-        self._model.Params.LogToConsole = 1
+        self._model.Params.LogToConsole = 0
         self._model.Params.TimeLimit = time_limit
         self._model.Params.lazyConstraints = 1
         self._model.Params.MIPGap = (
@@ -89,7 +92,7 @@ class GurobiTspSolver:
         def gurobi_subtour_callback(model, where):
             if where == gp.GRB.Callback.MESSAGE:
                 msg = model.cbGet(gp.GRB.Callback.MSG_STRING)
-                self.logger.info(msg)
+                self.logger.info(msg.strip())
             if where == gp.GRB.Callback.MIPSOL:
                 connected_components = list(
                     nx.connected_components(self._vars.as_graph(in_callback=True))
