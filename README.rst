@@ -628,6 +628,7 @@ Finally, add ``.gitattributes`` to git via
 Version History
 ===============
 
+- **2.4.1** Fixes bug when path ends with `/`.
 - **2.4.0** Removing information on installed packages due to deprecated ``pkg_resources``. New apply-function.
 - **2.2.2** Fixing problem with Jupyter notebooks, because they may not have a ``__file__`` attribute.
 - **2.2.1** Should be able to deal with corrupt zip files now.

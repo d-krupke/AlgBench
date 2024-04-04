@@ -7,7 +7,7 @@ import traceback
 import typing
 import os
 from contextlib import ExitStack, redirect_stderr, redirect_stdout
-
+from pathlib import Path
 import yaml
 
 from ._stream_utils import NotSavingIO, PrintingStringIO, StreamWithTime
@@ -301,16 +301,16 @@ class Benchmark:
         the file system.
         """
         old_db = self._db
-        original_path = old_db.path
+        original_path = Path(old_db.path)
 
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M")
         i = 0
-        new_path = f"{original_path}{timestamp}-{i}"
+        new_path = original_path.parent/f"{timestamp}-{i}"
         while os.path.exists(new_path):
             i += 1
-            new_path = f"{original_path}{timestamp}-{i}"
+            new_path = original_path.parent/f"{timestamp}-{i}"
 
-        old_db.move_database(new_path)
+        old_db.move_database(str(new_path))
         self._db = BenchmarkDb(original_path)
 
         for entry in old_db:
