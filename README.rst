@@ -118,11 +118,15 @@ I also recommend to first go through `this checklist <https://blog.sigplan.org/2
 Installation
 ------------
 
+**Requirements:** Python 3.10 or higher
+
 You can install AlgBench using pip
 
 .. code:: bash
 
    pip install -U algbench
+
+**Note:** As of version 2.5, AlgBench requires Python 3.10+. For older Python versions (3.8-3.9), please use AlgBench 2.4.x
 
 Usage
 -----
@@ -206,6 +210,45 @@ available entries.
 
 The ``Benchmark`` class provides further functionality, e.g., for
 deleting selected entries or reparing a broken database.
+
+Modern API Features (v2.5+)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+AlgBench 2.5 introduces a more Pythonic API using standard Python patterns:
+
+**Context Manager (automatic compression)**
+
+.. code:: python
+
+   with Benchmark("./my_benchmark", auto_compress=True) as bench:
+       bench.add(my_func, param1, param2)
+   # Automatically compressed on exit!
+
+**Decorator API (automatic tracking)**
+
+.. code:: python
+
+   @benchmark.experiment
+   def my_algorithm(x: int, y: int) -> dict:
+       result = complex_computation(x, y)
+       return {"result": result}
+
+   # Just call the function - automatically tracked!
+   my_algorithm(5, 10)
+
+**Combining Both**
+
+.. code:: python
+
+   with Benchmark("./data", auto_compress=True) as bench:
+       @bench.experiment
+       def solve(instance_name: str, _data=None) -> dict:
+           return {"solution": algorithm(_data)}
+
+       for name, data in instances.items():
+           solve(name, _data=data)
+
+See ``examples/modernized_api_example.py`` for complete examples.
 
 You can find `an example for graph
 coloring <./examples/graph_coloring/>`__. The important parts are shown
@@ -628,6 +671,13 @@ Finally, add ``.gitattributes`` to git via
 Version History
 ===============
 
+- **2.5.0** Major modernization update:
+  - **BREAKING CHANGE:** Requires Python 3.10+ (dropped support for Python 3.8 and 3.9)
+  - Added context manager support with ``auto_compress`` parameter
+  - Added decorator-based experiment API (``@benchmark.experiment``)
+  - Added custom exception classes with helpful error messages
+  - Improved test coverage from 86% to 89% (pandas.py: 52% → 98%)
+  - Added comprehensive examples demonstrating new APIs
 - **2.4.1** Fixes bug when path ends with `/`.
 - **2.4.0** Removing information on installed packages due to deprecated ``pkg_resources``. New apply-function.
 - **2.2.2** Fixing problem with Jupyter notebooks, because they may not have a ``__file__`` attribute.
