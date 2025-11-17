@@ -160,3 +160,12 @@ cython_debug/
 #.idea/
 .idea
 .vscode
+
+# AlgBench - Ignore benchmark output directories from examples and tests
+examples/example_*/
+examples/test_*/
+test_*_benchmark/
+test_*/
+*_benchmark/
+# But keep the actual example scripts
+!examples/*.py
