@@ -3,9 +3,15 @@ import os
 import shutil
 import sys
 import typing
+from pathlib import Path
 
 from .db import NfsJsonDict, NfsJsonList, NfsJsonSet
 from .environment import get_environment_info
+from .exceptions import (
+    DatabaseExistsError,
+    IncompatibleVersionError,
+    CorruptedDatabaseError,
+)
 from .fingerprint import fingerprint
 
 
@@ -22,9 +28,9 @@ class BenchmarkDb:
         if os.path.exists(info_path):
             with open(info_path) as f:
                 info = json.load(f)
-                if info.get("version", "v0.0.0")[1] == "0":
-                    msg = "Incompatible database of old version of AlgBench."
-                    raise RuntimeError(msg)
+                version = info.get("version", "v0.0.0")
+                if version[1] == "0":
+                    raise IncompatibleVersionError(version, self.path)
         else:
             os.makedirs(self.path, exist_ok=True)
             with open(info_path, "w") as f:
@@ -107,8 +113,7 @@ class BenchmarkDb:
         """
 
         if os.path.exists(new_path) or os.path.isfile(new_path):
-            msg = f"Error while moving database to {new_path}: There exists an equally named file or folder"
-            raise RuntimeError(msg)
+            raise DatabaseExistsError(new_path)
         shutil.move(self.path, new_path)
 
         self.path = new_path

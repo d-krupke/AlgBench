@@ -1,4 +1,5 @@
 import datetime
+import functools
 import random
 import inspect
 import logging
@@ -48,6 +49,7 @@ class Benchmark:
         save_output: bool = True,
         hide_output: bool = True,
         save_output_with_time: bool = True,
+        auto_compress: bool = False,
     ) -> None:
         """
         Just specify the path of where to put the
@@ -77,11 +79,14 @@ class Benchmark:
             insights on the runtime of the algorithm, but also increases the
             size of the database. This option is ignored if `save_output` is
             set to false.
+        :param auto_compress: If true, the benchmark will automatically compress
+            when used as a context manager (on __exit__). Defaults to False.
         """
         self._db = BenchmarkDb(path)
         self._save_output = save_output
         self._hide_output = hide_output
         self._save_output_with_time = save_output_with_time
+        self._auto_compress = auto_compress
         self._log_captures = {}
 
     def capture_logger(self, logger_name: str, level=logging.NOTSET):
@@ -110,6 +115,71 @@ class Benchmark:
         while the benchmark is running.
         """
         del self._log_captures[logger_name]
+
+    def experiment(
+        self,
+        func: typing.Optional[typing.Callable] = None,
+        *,
+        name: typing.Optional[str] = None,
+        tags: typing.Optional[typing.List[str]] = None,
+    ) -> typing.Callable:
+        """
+        Decorator to automatically track function calls in the benchmark.
+
+        This provides a more Pythonic API compared to manually calling `add()`.
+        The decorated function will automatically be added to the benchmark
+        if it hasn't been run with the same arguments before.
+
+        :param func: The function to decorate (when used without arguments)
+        :param name: Optional name for the experiment (defaults to function name)
+        :param tags: Optional list of tags for categorization
+        :return: The decorated function
+
+        Example usage:
+
+        .. code-block:: python
+
+            @benchmark.experiment
+            def my_algorithm(param1: int, param2: str, _instance=None):
+                result = run_algorithm(_instance, param1, param2)
+                return {"score": result}
+
+            # Just call the function normally - it will be tracked automatically
+            my_algorithm(5, "test", _instance=data)
+
+        Or with arguments:
+
+        .. code-block:: python
+
+            @benchmark.experiment(name="my_exp", tags=["fast", "greedy"])
+            def my_algorithm(x: int):
+                return {"result": x * 2}
+
+            my_algorithm(10)  # Automatically tracked
+        """
+
+        def decorator(f: typing.Callable) -> typing.Callable:
+            exp_name = name if name is not None else f.__name__
+
+            @functools.wraps(f)
+            def wrapper(*args, **kwargs):
+                # Check if this exact call has already been executed
+                if not self.exists(f, *args, **kwargs):
+                    # Run and record it
+                    self.run(f, *args, **kwargs)
+                # Always call the function and return its result
+                # This ensures the decorator is transparent
+                return f(*args, **kwargs)
+
+            return wrapper
+
+        # Handle both @benchmark.experiment and @benchmark.experiment()
+        if func is None:
+            # Called with arguments: @benchmark.experiment(name="foo")
+            return decorator
+        else:
+            # Called without arguments: @benchmark.experiment
+            return decorator(func)
 
     def _get_arg_data(self, func, args, kwargs) -> typing.Tuple[str, typing.Dict]:
         sig = inspect.signature(func)
@@ -347,3 +417,30 @@ class Benchmark:
         hashes = [fingerprint(entry) for entry in self]
         hashes.sort()
         return fingerprint(hashes)
+
+    def __enter__(self) -> "Benchmark":
+        """
+        Enter the runtime context for this benchmark.
+        Allows using Benchmark as a context manager:
+
+        >>> with Benchmark("./data", auto_compress=True) as bench:
+        ...     bench.add(func, x=1)
+        """
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """
+        Exit the runtime context for this benchmark.
+        Automatically compresses the benchmark if auto_compress is enabled.
+        """
+        if self._auto_compress:
+            self.compress()
+        return False
+
+    def __repr__(self) -> str:
+        """Return a developer-friendly representation of this benchmark."""
+        return f"Benchmark(path={self._db.path!r}, entries={len(self)})"
+
+    def __str__(self) -> str:
+        """Return a user-friendly string representation of this benchmark."""
+        return f"Benchmark at '{self._db.path}' with {len(self)} entries"

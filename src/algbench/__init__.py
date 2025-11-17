@@ -31,6 +31,18 @@ the usual boilerplate code.
 from .benchmark import Benchmark
 from .pandas import read_as_pandas, describe
 from .log_capture import JsonLogHandler, JsonLogCapture
+from .exceptions import (
+    AlgBenchError,
+    DatabaseError,
+    DatabaseExistsError,
+    IncompatibleVersionError,
+    CorruptedDatabaseError,
+    EmptyDatabaseError,
+    FingerprintCollisionError,
+    SerializationError,
+    ConcurrentAccessError,
+    ConfigurationError,
+)
 
 __all__ = [
     "Benchmark",
@@ -38,4 +50,15 @@ __all__ = [
     "describe",
     "JsonLogHandler",
     "JsonLogCapture",
+    # Exceptions
+    "AlgBenchError",
+    "DatabaseError",
+    "DatabaseExistsError",
+    "IncompatibleVersionError",
+    "CorruptedDatabaseError",
+    "EmptyDatabaseError",
+    "FingerprintCollisionError",
+    "SerializationError",
+    "ConcurrentAccessError",
+    "ConfigurationError",
 ]
